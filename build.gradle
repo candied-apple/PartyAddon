@@ -40,7 +40,7 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	// LibGui
-    modImplementation ("io.github.cottonmc:LibGui:${project.cottonmc_version}")
+   // modImplementation ("io.github.cottonmc:LibGui:${project.cottonmc_version}")
 	// LibZ
 	modImplementation ('com.github.Globox1997:LibZ:c19da208d5') {
 		exclude(group: "net.fabricmc.fabric-api")

@@ -684,18 +684,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import org.lwjgl.glfw.GLFW;
 
-import io.github.cottonmc.cotton.gui.client.LibGui;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.levelz.compat.InventorioScreenCompatibility;
 import net.levelz.init.KeyInit;
 import net.libz.api.Tab;
 import net.libz.util.DrawTabHelper;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -706,7 +702,6 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
-import net.partyaddon.PartyAddonMain;
 import net.partyaddon.access.GroupManagerAccess;
 import net.partyaddon.group.GroupManager;
 import net.partyaddon.init.ConfigInit;
