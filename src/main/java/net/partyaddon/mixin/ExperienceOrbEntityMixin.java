@@ -41,7 +41,9 @@ public abstract class ExperienceOrbEntityMixin extends Entity {
 
     @Inject(method = "onPlayerCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExperience(I)V"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     private void onPlayerCollisionMixin(PlayerEntity player, CallbackInfo info, int i) {
-        if (ConfigInit.CONFIG.distributeVanillaXP && !((GroupManagerAccess) player).getGroupManager().getGroupPlayerIdList().isEmpty()) {
+        if (ConfigInit.CONFIG.distributeVanillaXP && !((GroupManagerAccess) player).getGroupManager().getGroupPlayerIdList().isEmpty()
+                && ((GroupManagerAccess) player).getGroupManager().getGroupLeaderId() != null
+                && player.world.getPlayerByUuid(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId()) != null) {
             ((GroupLeaderAccess) player.world.getPlayerByUuid(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId())).addLeaderVanillaExperience(i);
             --this.pickingCount;
             if (this.pickingCount == 0) {

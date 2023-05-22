@@ -15,6 +15,7 @@ import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.partyaddon.access.GroupManagerAccess;
 import net.partyaddon.group.GroupManager;
 import net.partyaddon.init.ConfigInit;
@@ -495,14 +496,28 @@ public class PartyAddonServerPacket {
     public static void writeS2CMapCompatPacket(ServerPlayerEntity serverPlayerEntity) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         GroupManager groupManager = ((GroupManagerAccess) serverPlayerEntity).getGroupManager();
-        buf.writeInt(groupManager.getGroupPlayerIdList().size());
+
+        int uuidCount = 0;
+        List<UUID> groupPlayerUUIDs = new ArrayList<UUID>();
+        List<BlockPos> groupPlayerBlockPoses = new ArrayList<BlockPos>();
+        List<Float> groupPlayerYaws = new ArrayList<Float>();
+
         for (int i = 0; i < groupManager.getGroupPlayerIdList().size(); i++) {
             if (serverPlayerEntity.getWorld().getEntity(groupManager.getGroupPlayerIdList().get(i)) == null || serverPlayerEntity.getUuid().equals(groupManager.getGroupPlayerIdList().get(i))) {
                 continue;
             }
-            buf.writeUuid(groupManager.getGroupPlayerIdList().get(i));
-            buf.writeBlockPos(serverPlayerEntity.getWorld().getEntity(groupManager.getGroupPlayerIdList().get(i)).getBlockPos());
-            buf.writeFloat(serverPlayerEntity.getWorld().getEntity(groupManager.getGroupPlayerIdList().get(i)).getYaw());
+            groupPlayerUUIDs.add(groupManager.getGroupPlayerIdList().get(i));
+            groupPlayerBlockPoses.add(serverPlayerEntity.getWorld().getEntity(groupManager.getGroupPlayerIdList().get(i)).getBlockPos());
+            groupPlayerYaws.add(serverPlayerEntity.getWorld().getEntity(groupManager.getGroupPlayerIdList().get(i)).getYaw());
+
+            uuidCount = i + 1;
+        }
+
+        buf.writeInt(uuidCount);
+        for (int i = 0; i < uuidCount; i++) {
+            buf.writeUuid(groupPlayerUUIDs.get(i));
+            buf.writeBlockPos(groupPlayerBlockPoses.get(i));
+            buf.writeFloat(groupPlayerYaws.get(i));
         }
         CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(MAP_COMPAT_SC_PACKET, buf);
         serverPlayerEntity.networkHandler.sendPacket(packet);
