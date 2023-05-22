@@ -37,7 +37,9 @@ public abstract class LevelExperienceOrbEntityMixin extends Entity {
 
     @Inject(method = "onPlayerCollision", at = @At(value = "INVOKE", target = "Ljava/util/Map;forEach(Ljava/util/function/BiConsumer;)V"), cancellable = true)
     private void onPlayerCollisionMixin(PlayerEntity player, CallbackInfo info) {
-        if (ConfigInit.CONFIG.distributeLevelZXP && !((GroupManagerAccess) player).getGroupManager().getGroupPlayerIdList().isEmpty()) {
+        if (ConfigInit.CONFIG.distributeLevelZXP && !((GroupManagerAccess) player).getGroupManager().getGroupPlayerIdList().isEmpty()
+                && ((GroupManagerAccess) player).getGroupManager().getGroupLeaderId() != null
+                && player.world.getPlayerByUuid(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId()) != null) {
             getClumpedMap().forEach((value, amount) -> {
                 ((GroupLeaderAccess) player.world.getPlayerByUuid(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId())).addLeaderLevelZExperience(value * amount);
             });
