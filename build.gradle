@@ -15,6 +15,7 @@ repositories {
     maven { url "https://maven.terraformersmc.com/" }
 	maven { url "https://www.cursemaven.com" }
 	maven { url "https://jitpack.io" }
+	maven { url "https://server.bbkr.space/artifactory/libs-release" }
 }
 
 dependencies {
