@@ -15,7 +15,6 @@ repositories {
     maven { url "https://maven.terraformersmc.com/" }
 	maven { url "https://www.cursemaven.com" }
 	maven { url "https://jitpack.io" }
-	maven { url "https://server.bbkr.space/artifactory/libs-release" }
 }
 
 dependencies {
@@ -39,19 +38,10 @@ dependencies {
 	modImplementation ('com.github.Globox1997:LevelZ:1.19-SNAPSHOT') {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	// LibGui
-   // modImplementation ("io.github.cottonmc:LibGui:${project.cottonmc_version}")
 	// LibZ
-	modImplementation ('com.github.Globox1997:LibZ:c19da208d5') {
+	modImplementation ('com.github.Globox1997:LibZ:344927d33c') {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	// JobsAddon
-	modCompileOnly ('com.github.Globox1997:JobsAddon:1.19-SNAPSHOT') {
-        exclude(group: "net.fabricmc.fabric-api")
-		exclude(module:"LevelZ")
-		exclude(group: "me.shedaniel.cloth")
-		exclude(group: "dev.onyxstudios.cardinal-components-api")
-    }
 	// Clumps
 	modImplementation ("curse.maven:clumps-256717:4153346") {
 		exclude(group: "net.fabricmc.fabric-api")
