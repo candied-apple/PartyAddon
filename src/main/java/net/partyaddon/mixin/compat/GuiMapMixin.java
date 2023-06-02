@@ -34,9 +34,9 @@ import xaero.map.gui.ScreenBase;
 public abstract class GuiMapMixin extends ScreenBase implements WorldMapAccess {
 
     @Shadow
-    private double cameraX = 0.0D;
+    private double cameraX;
     @Shadow
-    private double cameraZ = 0.0D;
+    private double cameraZ;
     @Shadow
     private double scale;
     @Shadow
