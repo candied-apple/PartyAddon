@@ -1,6 +1,6 @@
 ### Added:
 - 
 ### Fixed:
-- Fixed world map bug
+- Fixed sharing xp bug
 ### Changed:
 - 

@@ -46,11 +46,15 @@ public abstract class LevelZServerPlayerEntityMixin extends PlayerEntity impleme
         List<UUID> groupPlayerIdList = ((GroupManagerAccess) this).getGroupManager().getGroupPlayerIdList();
         if (!groupPlayerIdList.isEmpty()) {
             if (groupPlayerIdList.size() <= this.collectedLevelZXP) {
+                int sharingExperience = this.collectedLevelZXP / groupPlayerIdList.size();
                 for (int i = 0; i < groupPlayerIdList.size(); i++) {
+                    if (this.world.getPlayerByUuid(groupPlayerIdList.get(i)) == null) {
+                        continue;
+                    }
                     ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) this.world.getPlayerByUuid(groupPlayerIdList.get(i));
-                    ((GroupLeaderAccess) serverPlayerEntity).addLevelZExperience(this.collectedLevelZXP / groupPlayerIdList.size());
+                    ((GroupLeaderAccess) serverPlayerEntity).addLevelZExperience(sharingExperience);
                 }
-                this.collectedLevelZXP -= groupPlayerIdList.size();
+                this.collectedLevelZXP -= (sharingExperience * groupPlayerIdList.size());
             }
         }
     }

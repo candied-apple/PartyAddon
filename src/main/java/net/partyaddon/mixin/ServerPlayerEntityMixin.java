@@ -67,11 +67,15 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gr
         List<UUID> groupPlayerIdList = ((GroupManagerAccess) this).getGroupManager().getGroupPlayerIdList();
         if (!groupPlayerIdList.isEmpty()) {
             if (groupPlayerIdList.size() <= this.collectedVanillaXP) {
+                int sharingExperience = this.collectedVanillaXP / groupPlayerIdList.size();
                 for (int i = 0; i < groupPlayerIdList.size(); i++) {
+                    if (this.world.getPlayerByUuid(groupPlayerIdList.get(i)) == null) {
+                        continue;
+                    }
                     ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) this.world.getPlayerByUuid(groupPlayerIdList.get(i));
-                    ((GroupLeaderAccess) serverPlayerEntity).addVanillaExperience(this.collectedVanillaXP / groupPlayerIdList.size());
+                    ((GroupLeaderAccess) serverPlayerEntity).addVanillaExperience(sharingExperience);
                 }
-                this.collectedVanillaXP -= groupPlayerIdList.size();
+                this.collectedVanillaXP -= (sharingExperience * groupPlayerIdList.size());
             }
         }
     }
