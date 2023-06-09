@@ -47,7 +47,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GroupMan
 
     @Inject(method = "remove", at = @At("HEAD"))
     private void removeMixin(Entity.RemovalReason reason, CallbackInfo info) {
-        if (!this.world.isClient && !reason.equals(RemovalReason.UNLOADED_WITH_PLAYER) && !this.groupManager.getGroupPlayerIdList().isEmpty()) {
+        if (!this.getWorld().isClient() && !reason.equals(RemovalReason.UNLOADED_WITH_PLAYER) && !this.groupManager.getGroupPlayerIdList().isEmpty()) {
             // this.groupManager.leaveGroup();
             // for (int i = 0; i < this.groupManager.getGroupPlayerIdList().size(); i++) {
 

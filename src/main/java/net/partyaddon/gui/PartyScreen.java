@@ -274,7 +274,7 @@
 //         DrawableHelper.drawCenteredText(matrices, textRenderer, this.title, this.width / 2, this.top + 7, 0xFFFFFF);// 0x3F3F3F
 
 //         // Available player list label
-//         this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.player_list"), this.left + 5, this.top + 15, 0x3F3F3F);
+//         context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.player_list"), this.left + 5, this.top + 15, 0x3F3F3F);
 
 //         int k = this.top + 45;
 //         this.renderScrollbar(matrices, this.left, this.top, this.availablePlayers);
@@ -295,7 +295,7 @@
 
 //                 if (this.textRenderer.getWidth(playerName) > 60)
 //                     playerName = playerName.substring(0, 10) + "..";
-//                 this.textRenderer.draw(matrices, playerName, this.left + 10, k, 0xFFFFFF);
+//                 context.drawText(this.textRenderer, playerName, this.left + 10, k, 0xFFFFFF);
 //                 k += 13;
 //                 ++m;
 //             }
@@ -338,7 +338,7 @@
 //         }
 
 //         // Invitation label
-//         this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.invitation"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.invitation")),
+//         context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.invitation"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.invitation")),
 //                 this.top + 16, 0x3F3F3F);
 
 //         this.acceptDeclineButton.visible = groupManager.getInvitationPlayerId() != 0;
@@ -350,30 +350,30 @@
 //                 String playerName = this.playerEntity.world.getEntityById(groupManager.getInvitationPlayerId()).getName().getString();
 //                 if (this.textRenderer.getWidth(playerName) > 60)
 //                     playerName = playerName.substring(0, 10) + "..";
-//                 this.textRenderer.draw(matrices, playerName, this.left + 114, this.top + 29, 0xFFFFFF);
+//                 context.drawText(this.textRenderer, playerName, this.left + 114, this.top + 29, 0xFFFFFF);
 //             }
 //         }
 //         // Info label
-//         this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.info"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.info")), this.top + 43,
+//         context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.info"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.info")), this.top + 43,
 //                 0x3F3F3F);
 
 //         if (!this.groupManager.getGroupPlayerIdList().isEmpty()) {
-//             this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.info_player_count", this.groupManager.getGroupPlayerIdList().size()), this.left + 109, this.top + 55, 0x3F3F3F);
+//             context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.info_player_count", this.groupManager.getGroupPlayerIdList().size()), this.left + 109, this.top + 55, 0x3F3F3F);
 
-//             this.textRenderer.draw(matrices,
+//             context.drawText(this.textRenderer,
 //                     Text.translatable("text.partyaddon.gui.info_experience", Math.round(ConfigInit.CONFIG.groupXpBonus * 100 * this.groupManager.getGroupPlayerIdList().size())), this.left + 109,
 //                     this.top + 67, 0x3F3F3F);
 //             if (this.groupManager.getGroupPlayerIdList().size() == ConfigInit.CONFIG.groupSize) {
-//                 this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.full_group_bonus").formatted(Formatting.DARK_GREEN), this.left + 109, this.top + 83, 0x3F3F3F);
-//                 this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.full_group_bonus_amount", Math.round(ConfigInit.CONFIG.fullGroupBonus * 100)).formatted(Formatting.DARK_GREEN),
+//                 context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.full_group_bonus").formatted(Formatting.DARK_GREEN), this.left + 109, this.top + 83, 0x3F3F3F);
+//                 context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.full_group_bonus_amount", Math.round(ConfigInit.CONFIG.fullGroupBonus * 100)).formatted(Formatting.DARK_GREEN),
 //                         this.left + 109, this.top + 95, 0x3F3F3F);
 //             }
 //         } else {
-//             this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.empty_info"), this.left + 109, this.top + 55, 0x3F3F3F);
+//             context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.empty_info"), this.left + 109, this.top + 55, 0x3F3F3F);
 //         }
 
 //         // Group label
-//         this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.group"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.group")), this.top + 110,
+//         context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.group"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.group")), this.top + 110,
 //                 0x3F3F3F);
 //         // if (!this.groupManager.getGroupPlayerIdList().isEmpty()) {
 //         int g = 0;
@@ -389,7 +389,7 @@
 //                 String playerName = this.playerEntity.world.getEntityById(playerId).getName().getString();
 //                 if (this.textRenderer.getWidth(playerName) > 60)
 //                     playerName = playerName.substring(0, 9) + "..";
-//                 this.textRenderer.draw(matrices, playerName, this.left + 114, this.top + 123 + g, 0xFFFFFF);
+//                 context.drawText(this.textRenderer, playerName, this.left + 114, this.top + 123 + g, 0xFFFFFF);
 
 //                 if (i != 0) {
 
@@ -690,7 +690,7 @@ import net.levelz.init.KeyInit;
 import net.libz.api.Tab;
 import net.libz.util.DrawTabHelper;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -919,54 +919,20 @@ public class PartyScreen extends Screen implements Tab {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        // translucent background
-        renderBackground(matrices);
-        // gui background
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_BACKGROUND);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
+        context.drawTexture(RenderInit.PARTY_ADDON_BACKGROUND, this.left, this.top, 0, 0, 200, 216);
 
-        this.drawTexture(matrices, this.left, this.top, 0, 0, 200, 216);
-
-        RenderSystem.setShaderTexture(0, net.levelz.init.RenderInit.GUI_ICONS);
-        // if (LibGui.isDarkMode()) {
-        // // bag icon
-        // this.drawTexture(matrices, this.left, this.top - 21, 120, 110, 24, 25);
-        // // skill icon
-        // this.drawTexture(matrices, this.left + 25, this.top - 21, 168, 110, 24, 21);
-        // } else {
-        // // bag icon
-        // this.drawTexture(matrices, this.left, this.top - 21, 24, 110, 24, 25);
-        // // skill icon
-        // this.drawTexture(matrices, this.left + 25, this.top - 21, 48, 110, 24, 21);
-        // }
-
-        // RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_GUI_ICONS);
-        // int xPos = 50;
-        // if (PartyAddonMain.isJobsAddonLoaded)
-        // xPos = 75;
-        // if (LibGui.isDarkMode()) {
-        // this.drawTexture(matrices, this.left + xPos, this.top - 23, 72, 0, 24, 27);
-        // } else {
-        // this.drawTexture(matrices, this.left + xPos, this.top - 23, 24, 0, 24, 27);
-        // }
-        // if (this.isPointWithinBounds(0, -21, 23, 21, (double) mouseX, (double) mouseY)) {
-        // this.renderTooltip(matrices, Text.translatable("container.inventory"), mouseX, mouseY);
-        // }
-        // if (this.isPointWithinBounds(25, -21, 23, 21, (double) mouseX, (double) mouseY)) {
-        // this.renderTooltip(matrices, Text.translatable("screen.levelz.skill_screen"), mouseX, mouseY);
-        // }
-        super.render(matrices, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
 
         // Top label
-        DrawableHelper.drawCenteredText(matrices, textRenderer, PartyScreen.title, this.width / 2, this.top + 7, 0xFFFFFF);// 0x3F3F3F
+        context.drawCenteredTextWithShadow(this.textRenderer, PartyScreen.title, this.width / 2, this.top + 7, 0xFFFFFF);// 0x3F3F3F
 
         // Available player list label
-        this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.player_list"), this.left + 5, this.top + 15, 0x3F3F3F);
+        context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.player_list"), this.left + 5, this.top + 15, 0x3F3F3F, false);
 
         int k = this.top + 45;
-        this.renderScrollbar(matrices, this.left, this.top, this.availablePlayers);
+        this.renderScrollbar(context, this.left, this.top, this.availablePlayers);
         int m = 0;
         if (!this.availablePlayers.isEmpty()) {
             for (int i = 0; i < this.availablePlayers.size(); i++) {
@@ -983,7 +949,7 @@ public class PartyScreen extends Screen implements Tab {
                 // }
 
                 String playerName = NameHelper.getPlayerName(client, this.availablePlayers.get(i), 60).getString();
-                this.textRenderer.draw(matrices, playerName, this.left + 10, k, 0xFFFFFF);
+                context.drawText(this.textRenderer, playerName, this.left + 10, k, 0xFFFFFF, false);
                 k += 13;
                 ++m;
             }
@@ -1014,7 +980,7 @@ public class PartyScreen extends Screen implements Tab {
 
         for (WidgetButtonPage widgetButtonPage : this.availablePlayerButtons) {
             if (widgetButtonPage.isHovered()) {
-                widgetButtonPage.renderTooltip(matrices, mouseX, mouseY);
+                widgetButtonPage.renderTooltip(context, mouseX, mouseY);
             }
             widgetButtonPage.visible = widgetButtonPage.index < this.availablePlayers.size();
             if (widgetButtonPage.visible) {
@@ -1023,12 +989,12 @@ public class PartyScreen extends Screen implements Tab {
         }
 
         if (this.acceptDeclineButton.active && this.acceptDeclineButton.visible && this.acceptDeclineButton.isHovered()) {
-            this.acceptDeclineButton.renderTooltip(matrices, mouseX, mouseY);
+            this.acceptDeclineButton.renderTooltip(context, mouseX, mouseY);
         }
 
         // Invitation label
-        this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.invitation"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.invitation")),
-                this.top + 16, 0x3F3F3F);
+        context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.invitation"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.invitation")),
+                this.top + 16, 0x3F3F3F, false);
 
         boolean acceptDeclineButton = this.groupManager.getInvitationPlayerId() != null && !this.groupManager.getGroupPlayerIdList().contains(this.groupManager.getInvitationPlayerId());
         this.acceptDeclineButton.visible = acceptDeclineButton;
@@ -1038,33 +1004,35 @@ public class PartyScreen extends Screen implements Tab {
 
             if (NameHelper.isPlayerUUIDNotNull(client, groupManager.getInvitationPlayerId())) {
                 String playerName = NameHelper.getPlayerName(client, groupManager.getInvitationPlayerId(), 60).getString();
-                this.textRenderer.draw(matrices, playerName, this.left + 114, this.top + 29, 0xFFFFFF);
+                context.drawText(this.textRenderer, playerName, this.left + 114, this.top + 29, 0xFFFFFF, false);
             }
         }
         // Info label
-        this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.info"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.info")), this.top + 43,
-                0x3F3F3F);
+        context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.info"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.info")), this.top + 43,
+                0x3F3F3F, false);
 
         if (!this.groupManager.getGroupPlayerIdList().isEmpty()) {
-            this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.info_player_count", this.groupManager.getGroupPlayerIdList().size()), this.left + 109, this.top + 55, 0x3F3F3F);
+            context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.info_player_count", this.groupManager.getGroupPlayerIdList().size()), this.left + 109, this.top + 55, 0x3F3F3F,
+                    false);
             if (ConfigInit.CONFIG.groupXpBonus > 0.0001f) {
-                this.textRenderer.draw(matrices,
+                context.drawText(this.textRenderer,
                         Text.translatable("text.partyaddon.gui.info_experience", Math.round(ConfigInit.CONFIG.groupXpBonus * 100 * this.groupManager.getGroupPlayerIdList().size())), this.left + 109,
-                        this.top + 67, 0x3F3F3F);
+                        this.top + 67, 0x3F3F3F, false);
             }
             if (this.groupManager.getGroupPlayerIdList().size() == ConfigInit.CONFIG.groupSize && ConfigInit.CONFIG.fullGroupBonus >= 0.0001f) {
-                this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.full_group_bonus").formatted(Formatting.DARK_GREEN), this.left + 109,
-                        this.top + 83 - (ConfigInit.CONFIG.groupXpBonus > 0.0001f ? 0 : 16), 0x3F3F3F);
-                this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.full_group_bonus_amount", Math.round(ConfigInit.CONFIG.fullGroupBonus * 100)).formatted(Formatting.DARK_GREEN),
-                        this.left + 109, this.top + 95, 0x3F3F3F);
+                context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.full_group_bonus").formatted(Formatting.DARK_GREEN), this.left + 109,
+                        this.top + 83 - (ConfigInit.CONFIG.groupXpBonus > 0.0001f ? 0 : 16), 0x3F3F3F, false);
+                context.drawText(this.textRenderer,
+                        Text.translatable("text.partyaddon.gui.full_group_bonus_amount", Math.round(ConfigInit.CONFIG.fullGroupBonus * 100)).formatted(Formatting.DARK_GREEN), this.left + 109,
+                        this.top + 95, 0x3F3F3F, false);
             }
         } else {
-            this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.empty_info"), this.left + 109, this.top + 55, 0x3F3F3F);
+            context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.empty_info"), this.left + 109, this.top + 55, 0x3F3F3F, false);
         }
 
         // Group label
-        this.textRenderer.draw(matrices, Text.translatable("text.partyaddon.gui.group"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.group")), this.top + 110,
-                0x3F3F3F);
+        context.drawText(this.textRenderer, Text.translatable("text.partyaddon.gui.group"), this.left + 195 - this.textRenderer.getWidth(Text.translatable("text.partyaddon.gui.group")),
+                this.top + 110, 0x3F3F3F, false);
         // if (!this.groupManager.getGroupPlayerIdList().isEmpty()) {
         int g = 0;
         for (int i = 0; i < ConfigInit.CONFIG.groupSize; i++) {
@@ -1077,7 +1045,7 @@ public class PartyScreen extends Screen implements Tab {
                 this.groupPlayerButtons[i].visible = true;
 
                 String playerName = NameHelper.getPlayerName(client, playerId, 60).getString();
-                this.textRenderer.draw(matrices, playerName, this.left + 114, this.top + 123 + g, 0xFFFFFF);
+                context.drawText(this.textRenderer, playerName, this.left + 114, this.top + 123 + g, 0xFFFFFF, false);
 
                 if (i != 0) {
 
@@ -1091,9 +1059,7 @@ public class PartyScreen extends Screen implements Tab {
                 // this.groupPlayerButtons[i].setStar(false);
                 // }
                 if (i != 0 && this.groupManager.isGroupLeader()) {
-                    RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_GUI_ICONS);
-                    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-                    this.drawTexture(matrices, this.left + 176, this.top + 123 + g, 21, 32, 7, 7);
+                    context.drawTexture(RenderInit.PARTY_ADDON_GUI_ICONS, this.left + 176, this.top + 123 + g, 21, 32, 7, 7);
                 }
                 if (this.groupPlayerButtons[i].isLeader()) {
                     if (!this.groupManager.getGroupLeaderId().equals(playerId)) {
@@ -1114,8 +1080,8 @@ public class PartyScreen extends Screen implements Tab {
             // }
             // }
         }
-        this.searchBox.render(matrices, mouseX, mouseY, delta);
-        DrawTabHelper.drawTab(client, matrices, this, this.left, this.top, mouseX, mouseY);
+        this.searchBox.render(context, mouseX, mouseY, delta);
+        DrawTabHelper.drawTab(client, context, this, this.left, this.top, mouseX, mouseY);
     }
 
     @Override
@@ -1125,8 +1091,9 @@ public class PartyScreen extends Screen implements Tab {
         if (KeyInit.screenKey.matchesKey(keyCode, scanCode) || Objects.requireNonNull(client).options.inventoryKey.matchesKey(keyCode, scanCode)) {
             this.close();
             return true;
-        } else
+        } else {
             return super.keyPressed(keyCode, scanCode, modifiers);
+        }
     }
 
     @Override
@@ -1184,8 +1151,7 @@ public class PartyScreen extends Screen implements Tab {
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
-    private void renderScrollbar(MatrixStack matrices, int x, int y, List<UUID> availablePlayers) {
-        RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_BACKGROUND);
+    private void renderScrollbar(DrawContext context, int x, int y, List<UUID> availablePlayers) {
         int i = availablePlayers.size() + 1 - availablePlayerButtons.length;
         if (i > 1) {
             int j = 167 - (27 + (i - 1) * 167 / i);
@@ -1194,19 +1160,19 @@ public class PartyScreen extends Screen implements Tab {
             if (this.indexStartOffset == i - 1) {
                 m = 142;
             }
-            this.drawTexture(matrices, x + 92, y + 42 + m, 200, 0, 6, 27);
+            context.drawTexture(RenderInit.PARTY_ADDON_BACKGROUND, x + 92, y + 42 + m, 200, 0, 6, 27);
         } else {
-            this.drawTexture(matrices, x + 92, y + 42, 206, 0, 6, 27);
+            context.drawTexture(RenderInit.PARTY_ADDON_BACKGROUND, x + 92, y + 42, 206, 0, 6, 27);
         }
     }
 
-    class WidgetButtonPage extends ButtonWidget {
+    private class WidgetButtonPage extends ButtonWidget {
         private final int index;
         private boolean star = false;
         private boolean leader = false;
 
         public WidgetButtonPage(int x, int y, int index, ButtonWidget.PressAction onPress) {
-            super(x, y, 86, 13, ScreenTexts.EMPTY, onPress);
+            super(x, y, 86, 13, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
             this.index = index;
             this.visible = false;
         }
@@ -1290,35 +1256,34 @@ public class PartyScreen extends Screen implements Tab {
         }
 
         @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
             TextRenderer textRenderer = client.textRenderer;
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_BACKGROUND);
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
-            int i = this.getYImage(this.isHovered());
+            // RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            // RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_BACKGROUND);
+            // RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
+            int i = this.getTextureY();
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.enableDepthTest();
-            this.drawTexture(matrices, this.x, this.y, star ? 86 : 0, 216 + i * 13, this.width, this.height);
+            context.drawTexture(RenderInit.PARTY_ADDON_BACKGROUND, this.getX(), this.getY(), star ? 86 : 0, 216 + i * 13, this.width, this.height);
             if (this.leader) {
-                RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_GUI_ICONS);
+                // RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_GUI_ICONS);
                 RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
                 RenderSystem.enableBlend();
 
-                this.drawTexture(matrices, this.x + 67, this.y + 3, 0, 32, 7, 7);
+                context.drawTexture(RenderInit.PARTY_ADDON_BACKGROUND, this.getX() + 67, this.getY() + 3, 0, 32, 7, 7);
             }
 
-            this.renderBackground(matrices, client, mouseX, mouseY);
+            // this.renderBackground(context, client, mouseX, mouseY);
             int j = this.active ? 0xFFFFFF : 0xA0A0A0;
-            ClickableWidget.drawCenteredText(matrices, textRenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0f) << 24);
+            context.drawCenteredTextWithShadow(textRenderer, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0f) << 24);
 
             if (this.isHovered()) {
-                this.renderTooltip(matrices, mouseX, mouseY);
+                this.renderTooltip(context, mouseX, mouseY);
             }
         }
 
-        @Override
-        public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+        public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
             if (this.hovered && this.active) {
 
                 UUID playerId = null;
@@ -1344,11 +1309,21 @@ public class PartyScreen extends Screen implements Tab {
                     if (NameHelper.isPlayerUUIDNotNull(client, playerId)) {
                         String playerName = NameHelper.getPlayerName(client, playerId, 0).getString();
                         if (PartyScreen.this.textRenderer.getWidth(playerName) > 60) {
-                            PartyScreen.this.renderTooltip(matrices, Text.of(playerName), mouseX, mouseY);
+                            context.drawTooltip(textRenderer, Text.of(playerName), mouseX, mouseY);
                         }
                     }
                 }
             }
+        }
+
+        private int getTextureY() {
+            int i = 1;
+            if (!this.active) {
+                i = 0;
+            } else if (this.isSelected()) {
+                i = 2;
+            }
+            return i;
         }
     }
 

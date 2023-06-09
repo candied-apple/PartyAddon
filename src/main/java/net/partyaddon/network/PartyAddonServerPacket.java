@@ -87,22 +87,22 @@ public class PartyAddonServerPacket {
         // ServerPlayNetworking.registerGlobalReceiver(INVITE_PLAYER_TO_GROUP_CS_PACKET, (server, player, handler, buffer, sender) -> {
         // int invitedPlayerId = buffer.readInt();
         // server.execute(() -> {
-        // if (player.world.getEntityById(invitedPlayerId) != null && player.world.getEntityById(invitedPlayerId) instanceof ServerPlayerEntity) {
-        // player.world.getEntityById(invitedPlayerId).sendMessage(Text.translatable("text.partyaddon.invitation", player.getName().getString()));
-        // ((GroupManagerAccess) player.world.getEntityById(invitedPlayerId)).getGroupManager().invitePlayerToGroup(player.getId());
+        // if (player.getWorld().getEntityById(invitedPlayerId) != null && player.getWorld().getEntityById(invitedPlayerId) instanceof ServerPlayerEntity) {
+        // player.getWorld().getEntityById(invitedPlayerId).sendMessage(Text.translatable("text.partyaddon.invitation", player.getName().getString()));
+        // ((GroupManagerAccess) player.getWorld().getEntityById(invitedPlayerId)).getGroupManager().invitePlayerToGroup(player.getId());
         // // Sync invitation
-        // writeS2CSyncInvitationPacket((ServerPlayerEntity) player.world.getEntityById(invitedPlayerId), player.getId());
+        // writeS2CSyncInvitationPacket((ServerPlayerEntity) player.getWorld().getEntityById(invitedPlayerId), player.getId());
         // }
         // });
         // });
         ServerPlayNetworking.registerGlobalReceiver(INVITE_PLAYER_TO_GROUP_CS_PACKET, (server, player, handler, buffer, sender) -> {
             UUID invitedPlayerId = buffer.readUuid();
             server.execute(() -> {
-                if (player.world.getPlayerByUuid(invitedPlayerId) != null && player.world.getPlayerByUuid(invitedPlayerId) instanceof ServerPlayerEntity) {
-                    player.world.getPlayerByUuid(invitedPlayerId).sendMessage(Text.translatable("text.partyaddon.invitation", player.getName().getString()));
-                    ((GroupManagerAccess) player.world.getPlayerByUuid(invitedPlayerId)).getGroupManager().invitePlayerToGroup(player.getUuid());
+                if (player.getWorld().getPlayerByUuid(invitedPlayerId) != null && player.getWorld().getPlayerByUuid(invitedPlayerId) instanceof ServerPlayerEntity) {
+                    player.getWorld().getPlayerByUuid(invitedPlayerId).sendMessage(Text.translatable("text.partyaddon.invitation", player.getName().getString()));
+                    ((GroupManagerAccess) player.getWorld().getPlayerByUuid(invitedPlayerId)).getGroupManager().invitePlayerToGroup(player.getUuid());
                     // Sync invitation
-                    writeS2CSyncInvitationPacket((ServerPlayerEntity) player.world.getPlayerByUuid(invitedPlayerId), player.getUuid());
+                    writeS2CSyncInvitationPacket((ServerPlayerEntity) player.getWorld().getPlayerByUuid(invitedPlayerId), player.getUuid());
                 }
             });
         });
@@ -112,23 +112,23 @@ public class PartyAddonServerPacket {
                 writeS2CSyncDeclinePacket(player, invitationPlayerId);
                 ((GroupManagerAccess) player).getGroupManager().declineInvitation();
 
-                if (player.world.getPlayerByUuid(invitationPlayerId) != null && player.world.getPlayerByUuid(invitationPlayerId) instanceof ServerPlayerEntity) {
-                    player.world.getPlayerByUuid(invitationPlayerId).sendMessage(Text.translatable("text.partyaddon.declined_invitation", player.getName().getString()));
+                if (player.getWorld().getPlayerByUuid(invitationPlayerId) != null && player.getWorld().getPlayerByUuid(invitationPlayerId) instanceof ServerPlayerEntity) {
+                    player.getWorld().getPlayerByUuid(invitationPlayerId).sendMessage(Text.translatable("text.partyaddon.declined_invitation", player.getName().getString()));
                 }
             });
         });
         // ServerPlayNetworking.registerGlobalReceiver(ACCEPT_INVITATION_CS_PACKET, (server, player, handler, buffer, sender) -> {
         // int invitationPlayerId = buffer.readInt();
         // server.execute(() -> {
-        // if (player.world.getEntityById(invitationPlayerId) != null && player.world.getEntityById(invitationPlayerId) instanceof ServerPlayerEntity) {
+        // if (player.getWorld().getEntityById(invitationPlayerId) != null && player.getWorld().getEntityById(invitationPlayerId) instanceof ServerPlayerEntity) {
 
-        // int leaderId = ((GroupManagerAccess) player.world.getEntityById(invitationPlayerId)).getGroupManager().getGroupLeaderId() == 0 ? invitationPlayerId
-        // : ((GroupManagerAccess) player.world.getEntityById(invitationPlayerId)).getGroupManager().getGroupLeaderId();
+        // int leaderId = ((GroupManagerAccess) player.getWorld().getEntityById(invitationPlayerId)).getGroupManager().getGroupLeaderId() == 0 ? invitationPlayerId
+        // : ((GroupManagerAccess) player.getWorld().getEntityById(invitationPlayerId)).getGroupManager().getGroupLeaderId();
 
         // // groupManager of leader
-        // GroupManager groupLeaderManager = ((GroupManagerAccess) player.world.getEntityById(leaderId)).getGroupManager();
+        // GroupManager groupLeaderManager = ((GroupManagerAccess) player.getWorld().getEntityById(leaderId)).getGroupManager();
         // if (groupLeaderManager.getGroupPlayerIdList().size() > ConfigInit.CONFIG.groupSize) {
-        // player.sendMessage(Text.translatable("text.partyaddon.group_is_full", player.world.getEntityById(leaderId).getName().getString()));
+        // player.sendMessage(Text.translatable("text.partyaddon.group_is_full", player.getWorld().getEntityById(leaderId).getName().getString()));
         // } else {
         // if (groupLeaderManager.getGroupPlayerIdList().isEmpty()) {
         // groupLeaderManager.addPlayerToGroup(leaderId); // equals invitationPlayerId
@@ -139,13 +139,13 @@ public class PartyAddonServerPacket {
         // groupLeaderManager.addPlayerToGroup(player.getId());
         // }
         // // Update leader
-        // writeS2CSyncGroupManagerPacket((ServerPlayerEntity) player.world.getEntityById(leaderId), groupLeaderManager);
+        // writeS2CSyncGroupManagerPacket((ServerPlayerEntity) player.getWorld().getEntityById(leaderId), groupLeaderManager);
 
         // for (int i = 1; i < groupLeaderManager.getGroupPlayerIdList().size(); i++) {
         // int playerId = groupLeaderManager.getGroupPlayerIdList().get(i);
-        // if (player.world.getEntityById(playerId) != null && player.world.getEntityById(playerId) instanceof ServerPlayerEntity) {
+        // if (player.getWorld().getEntityById(playerId) != null && player.getWorld().getEntityById(playerId) instanceof ServerPlayerEntity) {
 
-        // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.world.getEntityById(playerId);
+        // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getWorld().getEntityById(playerId);
 
         // List<Integer> groupPlayerList = new ArrayList<Integer>();
         // groupPlayerList.addAll(groupLeaderManager.getGroupPlayerIdList());
@@ -169,11 +169,11 @@ public class PartyAddonServerPacket {
 
         // // groupManager.getGroupPlayerIdList().forEach(id -> {
 
-        // // System.out.println("Player: " + id + " : " + player.world.getEntityById(id));
+        // // System.out.println("Player: " + id + " : " + player.getWorld().getEntityById(id));
 
-        // // if (player.world.getEntityById(id) != null && player.world.getEntityById(id) instanceof ServerPlayerEntity) {
+        // // if (player.getWorld().getEntityById(id) != null && player.getWorld().getEntityById(id) instanceof ServerPlayerEntity) {
 
-        // // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.world.getEntityById(id);
+        // // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getWorld().getEntityById(id);
 
         // // System.out.println("TESTXXX " + serverPlayerEntity + " : " + groupManager.getGroupPlayerIdList());
 
@@ -196,12 +196,12 @@ public class PartyAddonServerPacket {
         // // });
         // // for (int i = 1; i <= groupManager.getGroupPlayerIdList().size(); i++) {
 
-        // // // System.out.println("Player: " + k + " : " + player.world.getEntityById(groupManager.getGroupPlayerIdList().get(k)));
+        // // // System.out.println("Player: " + k + " : " + player.getWorld().getEntityById(groupManager.getGroupPlayerIdList().get(k)));
 
-        // // if (player.world.getEntityById(groupManager.getGroupPlayerIdList().get(i)) != null
-        // // && player.world.getEntityById(groupManager.getGroupPlayerIdList().get(i)) instanceof ServerPlayerEntity) {
+        // // if (player.getWorld().getEntityById(groupManager.getGroupPlayerIdList().get(i)) != null
+        // // && player.getWorld().getEntityById(groupManager.getGroupPlayerIdList().get(i)) instanceof ServerPlayerEntity) {
 
-        // // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.world.getEntityById(groupManager.getGroupPlayerIdList().get(i));
+        // // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getWorld().getEntityById(groupManager.getGroupPlayerIdList().get(i));
 
         // // // System.out.println("TESTXXX " + serverPlayerEntity + " : " + groupManager.getGroupPlayerIdList());
 
@@ -233,15 +233,15 @@ public class PartyAddonServerPacket {
             UUID invitationPlayerId = buffer.readUuid();
             server.execute(() -> {
                 GroupManager.tryJoinGroup(player, invitationPlayerId);
-                // if (player.world.getPlayerByUuid(invitationPlayerId) != null && player.world.getPlayerByUuid(invitationPlayerId) instanceof ServerPlayerEntity) {
+                // if (player.getWorld().getPlayerByUuid(invitationPlayerId) != null && player.getWorld().getPlayerByUuid(invitationPlayerId) instanceof ServerPlayerEntity) {
 
-                // UUID leaderId = ((GroupManagerAccess) player.world.getPlayerByUuid(invitationPlayerId)).getGroupManager().getGroupLeaderId() == null ? invitationPlayerId
-                // : ((GroupManagerAccess) player.world.getPlayerByUuid(invitationPlayerId)).getGroupManager().getGroupLeaderId();
+                // UUID leaderId = ((GroupManagerAccess) player.getWorld().getPlayerByUuid(invitationPlayerId)).getGroupManager().getGroupLeaderId() == null ? invitationPlayerId
+                // : ((GroupManagerAccess) player.getWorld().getPlayerByUuid(invitationPlayerId)).getGroupManager().getGroupLeaderId();
 
                 // // groupManager of leader
-                // GroupManager groupLeaderManager = ((GroupManagerAccess) player.world.getPlayerByUuid(leaderId)).getGroupManager();
+                // GroupManager groupLeaderManager = ((GroupManagerAccess) player.getWorld().getPlayerByUuid(leaderId)).getGroupManager();
                 // if (groupLeaderManager.getGroupPlayerIdList().size() > ConfigInit.CONFIG.groupSize) {
-                // player.sendMessage(Text.translatable("text.partyaddon.group_is_full", player.world.getPlayerByUuid(leaderId).getName().getString()));
+                // player.sendMessage(Text.translatable("text.partyaddon.group_is_full", player.getWorld().getPlayerByUuid(leaderId).getName().getString()));
                 // } else {
                 // if (groupLeaderManager.getGroupPlayerIdList().isEmpty()) {
                 // groupLeaderManager.addPlayerToGroup(leaderId); // equals invitationPlayerId
@@ -252,13 +252,13 @@ public class PartyAddonServerPacket {
                 // groupLeaderManager.addPlayerToGroup(player.getUuid());
                 // }
                 // // Update leader
-                // writeS2CSyncGroupManagerPacket((ServerPlayerEntity) player.world.getPlayerByUuid(leaderId), groupLeaderManager);
+                // writeS2CSyncGroupManagerPacket((ServerPlayerEntity) player.getWorld().getPlayerByUuid(leaderId), groupLeaderManager);
 
                 // for (int i = 1; i < groupLeaderManager.getGroupPlayerIdList().size(); i++) {
                 // UUID playerId = groupLeaderManager.getGroupPlayerIdList().get(i);
-                // if (player.world.getPlayerByUuid(playerId) != null && player.world.getPlayerByUuid(playerId) instanceof ServerPlayerEntity) {
+                // if (player.getWorld().getPlayerByUuid(playerId) != null && player.getWorld().getPlayerByUuid(playerId) instanceof ServerPlayerEntity) {
 
-                // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.world.getPlayerByUuid(playerId);
+                // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getWorld().getPlayerByUuid(playerId);
 
                 // List<UUID> groupPlayerList = new ArrayList<UUID>();
                 // groupPlayerList.addAll(groupLeaderManager.getGroupPlayerIdList());
@@ -292,10 +292,10 @@ public class PartyAddonServerPacket {
             UUID groupLeaderUUID = buffer.readUuid();
             UUID kickPlayerId = buffer.readUuid();
             server.execute(() -> {
-                if (player.world.getPlayerByUuid(kickPlayerId) != null && player.world.getPlayerByUuid(kickPlayerId) instanceof ServerPlayerEntity
-                        && player.world.getPlayerByUuid(groupLeaderUUID) != null && player.world.getPlayerByUuid(groupLeaderUUID) instanceof ServerPlayerEntity
-                        && ((GroupManagerAccess) player.world.getPlayerByUuid(groupLeaderUUID)).getGroupManager().isGroupLeader()) {
-                    GroupManager.leaveGroup((ServerPlayerEntity) player.world.getPlayerByUuid(kickPlayerId), true);
+                if (player.getWorld().getPlayerByUuid(kickPlayerId) != null && player.getWorld().getPlayerByUuid(kickPlayerId) instanceof ServerPlayerEntity
+                        && player.getWorld().getPlayerByUuid(groupLeaderUUID) != null && player.getWorld().getPlayerByUuid(groupLeaderUUID) instanceof ServerPlayerEntity
+                        && ((GroupManagerAccess) player.getWorld().getPlayerByUuid(groupLeaderUUID)).getGroupManager().isGroupLeader()) {
+                    GroupManager.leaveGroup((ServerPlayerEntity) player.getWorld().getPlayerByUuid(kickPlayerId), true);
                 }
             });
         });
@@ -503,12 +503,12 @@ public class PartyAddonServerPacket {
         List<Float> groupPlayerYaws = new ArrayList<Float>();
 
         for (int i = 0; i < groupManager.getGroupPlayerIdList().size(); i++) {
-            if (serverPlayerEntity.getWorld().getEntity(groupManager.getGroupPlayerIdList().get(i)) == null || serverPlayerEntity.getUuid().equals(groupManager.getGroupPlayerIdList().get(i))) {
+            if (serverPlayerEntity.getWorld().getPlayerByUuid(groupManager.getGroupPlayerIdList().get(i)) == null || serverPlayerEntity.getUuid().equals(groupManager.getGroupPlayerIdList().get(i))) {
                 continue;
             }
             groupPlayerUUIDs.add(groupManager.getGroupPlayerIdList().get(i));
-            groupPlayerBlockPoses.add(serverPlayerEntity.getWorld().getEntity(groupManager.getGroupPlayerIdList().get(i)).getBlockPos());
-            groupPlayerYaws.add(serverPlayerEntity.getWorld().getEntity(groupManager.getGroupPlayerIdList().get(i)).getYaw());
+            groupPlayerBlockPoses.add(serverPlayerEntity.getWorld().getPlayerByUuid(groupManager.getGroupPlayerIdList().get(i)).getBlockPos());
+            groupPlayerYaws.add(serverPlayerEntity.getWorld().getPlayerByUuid(groupManager.getGroupPlayerIdList().get(i)).getYaw());
 
             uuidCount = i + 1;
         }

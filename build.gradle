@@ -1,10 +1,7 @@
 plugins {
-	id 'fabric-loom' version '1.1-SNAPSHOT'
+	id 'fabric-loom' version '1.2-SNAPSHOT'
 	id 'maven-publish'
 }
-
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -13,6 +10,7 @@ group = project.maven_group
 repositories {
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/" }
+	maven { url "https://api.modrinth.com/maven" }
 	maven { url "https://www.cursemaven.com" }
 	maven { url "https://jitpack.io" }
 }
@@ -34,20 +32,20 @@ dependencies {
     modCompileOnly modRuntimeOnly("com.terraformersmc:modmenu:${project.mod_menu_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-	// LevelZ
-	modImplementation ('com.github.Globox1997:LevelZ:1.19-SNAPSHOT') {
+    // LevelZ
+    modImplementation ('maven.modrinth:levelz:1.4.9+1.20') {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	// LibZ
-	modImplementation ('com.github.Globox1997:LibZ:344927d33c') {
+    // LibZ
+    modApi ('maven.modrinth:libz:1.0.1+1.20') {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	// Clumps
-	modImplementation ("curse.maven:clumps-256717:4153346") {
+	modCompileOnly ("curse.maven:clumps-256717:4153346") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	// WorldMap
-	modCompileOnly ('curse.maven:xaeros-world-map-317780:4516863') {
+	modCompileOnly ('maven.modrinth:xaeros-world-map:1.30.3_Fabric_1.20') {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 }
@@ -70,6 +68,9 @@ java {
 	// if it is present.
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {

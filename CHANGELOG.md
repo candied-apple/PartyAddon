@@ -1,6 +1,6 @@
 ### Added:
 - 
 ### Fixed:
-- Fixed sharing xp bug
-### Changed:
 - 
+### Changed:
+- Updated to mc 1.20

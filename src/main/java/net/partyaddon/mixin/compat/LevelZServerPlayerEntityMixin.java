@@ -7,6 +7,7 @@ import com.mojang.authlib.GameProfile;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.encryption.PlayerPublicKey;
@@ -19,10 +20,11 @@ import net.partyaddon.access.GroupManagerAccess;
 @Mixin(value = ServerPlayerEntity.class, priority = 1010)
 public abstract class LevelZServerPlayerEntityMixin extends PlayerEntity implements GroupLeaderAccess {
 
+    @Unique
     private int collectedLevelZXP = 0;
 
-    public LevelZServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile, PlayerPublicKey publicKey) {
-        super(world, pos, yaw, gameProfile, publicKey);
+    public LevelZServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
+        super(world, pos, yaw, gameProfile);
     }
 
     // @Override
@@ -48,10 +50,10 @@ public abstract class LevelZServerPlayerEntityMixin extends PlayerEntity impleme
             if (groupPlayerIdList.size() <= this.collectedLevelZXP) {
                 int sharingExperience = this.collectedLevelZXP / groupPlayerIdList.size();
                 for (int i = 0; i < groupPlayerIdList.size(); i++) {
-                    if (this.world.getPlayerByUuid(groupPlayerIdList.get(i)) == null) {
+                    if (this.getWorld().getPlayerByUuid(groupPlayerIdList.get(i)) == null) {
                         continue;
                     }
-                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) this.world.getPlayerByUuid(groupPlayerIdList.get(i));
+                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) this.getWorld().getPlayerByUuid(groupPlayerIdList.get(i));
                     ((GroupLeaderAccess) serverPlayerEntity).addLevelZExperience(sharingExperience);
                 }
                 this.collectedLevelZXP -= (sharingExperience * groupPlayerIdList.size());

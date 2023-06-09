@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -63,7 +64,7 @@ public abstract class GuiMapMixin extends ScreenBase implements WorldMapAccess {
     }
 
     @Inject(method = "render", at = @At(value = "FIELD", target = "Lxaero/map/settings/ModSettings;renderArrow:Z", ordinal = 0))
-    private void renderMixin(MatrixStack matrixStack, int scaledMouseX, int scaledMouseY, float partialTicks, CallbackInfo info) {
+    private void renderMixin(DrawContext context, int scaledMouseX, int scaledMouseY, float partialTicks, CallbackInfo info) {
         if (WorldMap.settings.renderArrow) {
             if (groupPlayerUUIDList != null && !groupPlayerUUIDList.isEmpty()) {
                 double leftBorder = this.cameraX - (double) (client.getWindow().getFramebufferWidth() / 2) / this.scale;
@@ -83,11 +84,11 @@ public abstract class GuiMapMixin extends ScreenBase implements WorldMapAccess {
 
                     if (!toTheLeft && !toTheRight && !up && !down) {
                         this.setColourBuffer(0.0F, 0.0F, 0.0F, 0.9F);
-                        this.drawArrowOnMap(matrixStack, regularUIObjectConsumer, this.groupPlayerPosList.get(i).getX() - this.cameraX,
+                        this.drawArrowOnMap(context.getMatrices(), regularUIObjectConsumer, this.groupPlayerPosList.get(i).getX() - this.cameraX,
                                 this.groupPlayerPosList.get(i).getZ() + 2.0D * scaleMultiplier / this.scale - this.cameraZ, this.groupPlayerYawsList.get(i), scaleMultiplier / this.scale);
 
                         this.setColourBuffer(0.0F, 0.55F, 1.0F, 1.0F);
-                        this.drawArrowOnMap(matrixStack, regularUIObjectConsumer, this.groupPlayerPosList.get(i).getX() - this.cameraX, this.groupPlayerPosList.get(i).getZ() - this.cameraZ,
+                        this.drawArrowOnMap(context.getMatrices(), regularUIObjectConsumer, this.groupPlayerPosList.get(i).getX() - this.cameraX, this.groupPlayerPosList.get(i).getZ() - this.cameraZ,
                                 this.groupPlayerYawsList.get(i), scaleMultiplier / this.scale);
 
                         if (isPointWithinBounds((int) (this.groupPlayerPosList.get(i).getX()), (int) (this.groupPlayerPosList.get(i).getZ()), (int) (8 * multiplier), (int) (8 * multiplier),
@@ -117,10 +118,11 @@ public abstract class GuiMapMixin extends ScreenBase implements WorldMapAccess {
                         }
 
                         this.setColourBuffer(0.0F, 0.0F, 0.0F, 0.9F);
-                        this.drawFarArrowOnMap(matrixStack, regularUIObjectConsumer, arrowX - this.cameraX, arrowZ + 2.0D * scaleMultiplier / this.scale - this.cameraZ,
+                        this.drawFarArrowOnMap(context.getMatrices(), regularUIObjectConsumer, arrowX - this.cameraX, arrowZ + 2.0D * scaleMultiplier / this.scale - this.cameraZ,
                                 this.groupPlayerYawsList.get(i), scaleMultiplier / this.scale);
                         this.setColourBuffer(0.0F, 0.55F, 1.0F, 1.0F);
-                        this.drawFarArrowOnMap(matrixStack, regularUIObjectConsumer, arrowX - this.cameraX, arrowZ - this.cameraZ, this.groupPlayerYawsList.get(i), scaleMultiplier / this.scale);
+                        this.drawFarArrowOnMap(context.getMatrices(), regularUIObjectConsumer, arrowX - this.cameraX, arrowZ - this.cameraZ, this.groupPlayerYawsList.get(i),
+                                scaleMultiplier / this.scale);
 
                         if (isPointWithinBounds((int) (this.groupPlayerPosList.get(i).getX()), (int) (this.groupPlayerPosList.get(i).getZ()), (int) (8 * multiplier), (int) (8 * multiplier),
                                 this.mouseBlockPosX, this.mouseBlockPosZ)) {
@@ -129,16 +131,16 @@ public abstract class GuiMapMixin extends ScreenBase implements WorldMapAccess {
                     }
                 }
                 if (!playerNames.equals("")) {
-                    MatrixStack stack = new MatrixStack();
+                    // MatrixStack stack = new MatrixStack();
                     CursorBox playerNamesTooltip = new CursorBox(playerNames);
-                    playerNamesTooltip.drawBox(stack, scaledMouseX, scaledMouseY, width, height);
+                    playerNamesTooltip.drawBox(context, scaledMouseX, scaledMouseY, width, height);
                 }
             }
         }
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    private void renderTailMixin(MatrixStack matrixStack, int scaledMouseX, int scaledMouseY, float partialTicks, CallbackInfo info) {
+    private void renderTailMixin(DrawContext context, int scaledMouseX, int scaledMouseY, float partialTicks, CallbackInfo info) {
         this.syncCount++;
         if (this.syncCount != 0 && this.syncCount % 200 == 0) {
             client.getNetworkHandler().sendPacket(new CustomPayloadC2SPacket(PartyAddonServerPacket.MAP_COMPAT_CS_PACKET, new PacketByteBuf(Unpooled.buffer())));

@@ -14,7 +14,6 @@
     "compat.LevelZServerPlayerEntityMixin"
   ],
   "client": [
-    "client.InGameHudMixin",
     "compat.GuiMapMixin",
     "compat.ControlsHandlerMixin"
   ],

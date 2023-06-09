@@ -7,6 +7,7 @@ import com.mojang.authlib.GameProfile;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -27,10 +28,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gr
     @Shadow
     private int syncedExperience = -99999999;
 
+    @Unique
     private int collectedVanillaXP = 0;
 
-    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile, PlayerPublicKey publicKey) {
-        super(world, pos, yaw, gameProfile, publicKey);
+    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
+        super(world, pos, yaw, gameProfile);
     }
 
     // @Inject(method = "addExperience", at = @At("HEAD"), cancellable = true)
@@ -69,10 +71,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gr
             if (groupPlayerIdList.size() <= this.collectedVanillaXP) {
                 int sharingExperience = this.collectedVanillaXP / groupPlayerIdList.size();
                 for (int i = 0; i < groupPlayerIdList.size(); i++) {
-                    if (this.world.getPlayerByUuid(groupPlayerIdList.get(i)) == null) {
+                    if (this.getWorld().getPlayerByUuid(groupPlayerIdList.get(i)) == null) {
                         continue;
                     }
-                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) this.world.getPlayerByUuid(groupPlayerIdList.get(i));
+                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) this.getWorld().getPlayerByUuid(groupPlayerIdList.get(i));
                     ((GroupLeaderAccess) serverPlayerEntity).addVanillaExperience(sharingExperience);
                 }
                 this.collectedVanillaXP -= (sharingExperience * groupPlayerIdList.size());
