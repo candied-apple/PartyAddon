@@ -1,15 +1,11 @@
 package net.partyaddon.network;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -18,8 +14,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.partyaddon.access.GroupManagerAccess;
 import net.partyaddon.group.GroupManager;
-import net.partyaddon.init.ConfigInit;
-import net.partyaddon.util.GroupHelper;
 
 public class PartyAddonServerPacket {
 
@@ -58,19 +52,7 @@ public class PartyAddonServerPacket {
                 writeS2COpenPartyScreenPacket(player);
             });
         });
-        // ServerPlayNetworking.registerGlobalReceiver(CHANGE_STAR_PLAYER_LIST_CS_PACKET, (server, player, handler, buffer, sender) -> {
-        // int playerId = buffer.readInt();
-        // server.execute(() -> {
-        // GroupManager groupManager = ((GroupManagerAccess) player).getGroupManager();
-        // if (groupManager.getStarPlayerIdList().contains(playerId)) {
-        // groupManager.removePlayerStar(playerId);
-        // } else {
-        // groupManager.addPlayerStar(playerId);
-        // }
-        // // Sync star player list
-        // writeS2CSyncStarPlayerListPacket(player);
-        // });
-        // });
+
         ServerPlayNetworking.registerGlobalReceiver(CHANGE_STAR_PLAYER_LIST_CS_PACKET, (server, player, handler, buffer, sender) -> {
             UUID playerId = buffer.readUuid();
             server.execute(() -> {
@@ -84,17 +66,7 @@ public class PartyAddonServerPacket {
                 writeS2CSyncStarPlayerListPacket(player);
             });
         });
-        // ServerPlayNetworking.registerGlobalReceiver(INVITE_PLAYER_TO_GROUP_CS_PACKET, (server, player, handler, buffer, sender) -> {
-        // int invitedPlayerId = buffer.readInt();
-        // server.execute(() -> {
-        // if (player.getWorld().getEntityById(invitedPlayerId) != null && player.getWorld().getEntityById(invitedPlayerId) instanceof ServerPlayerEntity) {
-        // player.getWorld().getEntityById(invitedPlayerId).sendMessage(Text.translatable("text.partyaddon.invitation", player.getName().getString()));
-        // ((GroupManagerAccess) player.getWorld().getEntityById(invitedPlayerId)).getGroupManager().invitePlayerToGroup(player.getId());
-        // // Sync invitation
-        // writeS2CSyncInvitationPacket((ServerPlayerEntity) player.getWorld().getEntityById(invitedPlayerId), player.getId());
-        // }
-        // });
-        // });
+
         ServerPlayNetworking.registerGlobalReceiver(INVITE_PLAYER_TO_GROUP_CS_PACKET, (server, player, handler, buffer, sender) -> {
             UUID invitedPlayerId = buffer.readUuid();
             server.execute(() -> {
@@ -106,6 +78,7 @@ public class PartyAddonServerPacket {
                 }
             });
         });
+
         ServerPlayNetworking.registerGlobalReceiver(DECLINE_INVITATION_CS_PACKET, (server, player, handler, buffer, sender) -> {
             UUID invitationPlayerId = buffer.readUuid();
             server.execute(() -> {
@@ -117,168 +90,11 @@ public class PartyAddonServerPacket {
                 }
             });
         });
-        // ServerPlayNetworking.registerGlobalReceiver(ACCEPT_INVITATION_CS_PACKET, (server, player, handler, buffer, sender) -> {
-        // int invitationPlayerId = buffer.readInt();
-        // server.execute(() -> {
-        // if (player.getWorld().getEntityById(invitationPlayerId) != null && player.getWorld().getEntityById(invitationPlayerId) instanceof ServerPlayerEntity) {
 
-        // int leaderId = ((GroupManagerAccess) player.getWorld().getEntityById(invitationPlayerId)).getGroupManager().getGroupLeaderId() == 0 ? invitationPlayerId
-        // : ((GroupManagerAccess) player.getWorld().getEntityById(invitationPlayerId)).getGroupManager().getGroupLeaderId();
-
-        // // groupManager of leader
-        // GroupManager groupLeaderManager = ((GroupManagerAccess) player.getWorld().getEntityById(leaderId)).getGroupManager();
-        // if (groupLeaderManager.getGroupPlayerIdList().size() > ConfigInit.CONFIG.groupSize) {
-        // player.sendMessage(Text.translatable("text.partyaddon.group_is_full", player.getWorld().getEntityById(leaderId).getName().getString()));
-        // } else {
-        // if (groupLeaderManager.getGroupPlayerIdList().isEmpty()) {
-        // groupLeaderManager.addPlayerToGroup(leaderId); // equals invitationPlayerId
-        // groupLeaderManager.setGroupLeaderId(leaderId);
-
-        // groupLeaderManager.addPlayerToGroup(player.getId());
-        // } else {
-        // groupLeaderManager.addPlayerToGroup(player.getId());
-        // }
-        // // Update leader
-        // writeS2CSyncGroupManagerPacket((ServerPlayerEntity) player.getWorld().getEntityById(leaderId), groupLeaderManager);
-
-        // for (int i = 1; i < groupLeaderManager.getGroupPlayerIdList().size(); i++) {
-        // int playerId = groupLeaderManager.getGroupPlayerIdList().get(i);
-        // if (player.getWorld().getEntityById(playerId) != null && player.getWorld().getEntityById(playerId) instanceof ServerPlayerEntity) {
-
-        // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getWorld().getEntityById(playerId);
-
-        // List<Integer> groupPlayerList = new ArrayList<Integer>();
-        // groupPlayerList.addAll(groupLeaderManager.getGroupPlayerIdList());
-        // groupPlayerList.remove((Object) serverPlayerEntity.getId());
-        // groupPlayerList.add(0, serverPlayerEntity.getId());
-        // ((GroupManagerAccess) serverPlayerEntity).getGroupManager().updatePlayerGroupIdList(groupPlayerList, leaderId);
-
-        // if (serverPlayerEntity.getId() != player.getId()) {
-        // serverPlayerEntity.sendMessage(Text.translatable("text.partyaddon.accepted_invitation", player.getName().getString()));
-        // }
-        // // update manager
-        // writeS2CSyncGroupManagerPacket(serverPlayerEntity, ((GroupManagerAccess) serverPlayerEntity).getGroupManager());
-        // }
-        // }
-
-        // // groupLeaderManager.addPlayerToGroup(invitationPlayerId);
-
-        // // groupManager.updateGroup(newGroupPlayerIdList, groupLeaderId);
-
-        // // System.out.println("TEST " + player + " : " + groupManager.getGroupPlayerIdList() + " : Size: " + groupManager.getGroupPlayerIdList().size());
-
-        // // groupManager.getGroupPlayerIdList().forEach(id -> {
-
-        // // System.out.println("Player: " + id + " : " + player.getWorld().getEntityById(id));
-
-        // // if (player.getWorld().getEntityById(id) != null && player.getWorld().getEntityById(id) instanceof ServerPlayerEntity) {
-
-        // // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getWorld().getEntityById(id);
-
-        // // System.out.println("TESTXXX " + serverPlayerEntity + " : " + groupManager.getGroupPlayerIdList());
-
-        // // ((GroupManagerAccess) serverPlayerEntity).getGroupManager().updateGroup(groupManager.getGroupPlayerIdList(), leaderId);
-
-        // // // ((GroupManagerAccess) serverPlayerEntity).getGroupManager().addPlayerToGroup(player.getId());
-        // // if (serverPlayerEntity.getId() != player.getId()) {
-        // // serverPlayerEntity.sendMessage(Text.translatable("text.partyaddon.accepted_invitation", player.getName().getString()));
-        // // }
-
-        // // System.out.println("B " + serverPlayerEntity.getName().getString() + " : " + ((GroupManagerAccess) serverPlayerEntity).getGroupManager().getGroupPlayerIdList());
-
-        // // // update manager
-        // // writeS2CUpdateGroupManagerPacket(serverPlayerEntity);
-
-        // // System.out.println("A " + serverPlayerEntity.getName().getString() + " : " + ((GroupManagerAccess) serverPlayerEntity).getGroupManager().getGroupPlayerIdList());
-        // // }
-        // // System.out.println("I: " + id);
-
-        // // });
-        // // for (int i = 1; i <= groupManager.getGroupPlayerIdList().size(); i++) {
-
-        // // // System.out.println("Player: " + k + " : " + player.getWorld().getEntityById(groupManager.getGroupPlayerIdList().get(k)));
-
-        // // if (player.getWorld().getEntityById(groupManager.getGroupPlayerIdList().get(i)) != null
-        // // && player.getWorld().getEntityById(groupManager.getGroupPlayerIdList().get(i)) instanceof ServerPlayerEntity) {
-
-        // // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getWorld().getEntityById(groupManager.getGroupPlayerIdList().get(i));
-
-        // // // System.out.println("TESTXXX " + serverPlayerEntity + " : " + groupManager.getGroupPlayerIdList());
-
-        // // ((GroupManagerAccess) serverPlayerEntity).getGroupManager().updateGroup(groupManager.getGroupPlayerIdList(), leaderId);
-
-        // // // ((GroupManagerAccess) serverPlayerEntity).getGroupManager().addPlayerToGroup(player.getId());
-        // // if (serverPlayerEntity.getId() != player.getId()) {
-        // // serverPlayerEntity.sendMessage(Text.translatable("text.partyaddon.accepted_invitation", player.getName().getString()));
-        // // }
-
-        // // // System.out.println("B " + serverPlayerEntity.getName().getString() + " : " + ((GroupManagerAccess) serverPlayerEntity).getGroupManager().getGroupPlayerIdList());
-
-        // // // // update manager
-        // // writeS2CUpdateGroupManagerPacket(serverPlayerEntity);
-
-        // // // System.out.println("A " + serverPlayerEntity.getName().getString() + " : " + ((GroupManagerAccess) serverPlayerEntity).getGroupManager().getGroupPlayerIdList());
-        // // }
-        // // // System.out.println("I: " + k);
-        // // }
-        // // ((GroupManagerAccess) player).getGroupManager().joinGroup(groupManager.getGroupPlayerIdList(), groupManager.getGroupLeaderId());
-        // }
-        // }
-        // // set invitation id server and client to 0
-        // ((GroupManagerAccess) player).getGroupManager().declineInvitation();
-        // writeS2CSyncDeclinePacket(player, 0);
-        // });
-        // });
         ServerPlayNetworking.registerGlobalReceiver(ACCEPT_INVITATION_CS_PACKET, (server, player, handler, buffer, sender) -> {
             UUID invitationPlayerId = buffer.readUuid();
             server.execute(() -> {
                 GroupManager.tryJoinGroup(player, invitationPlayerId);
-                // if (player.getWorld().getPlayerByUuid(invitationPlayerId) != null && player.getWorld().getPlayerByUuid(invitationPlayerId) instanceof ServerPlayerEntity) {
-
-                // UUID leaderId = ((GroupManagerAccess) player.getWorld().getPlayerByUuid(invitationPlayerId)).getGroupManager().getGroupLeaderId() == null ? invitationPlayerId
-                // : ((GroupManagerAccess) player.getWorld().getPlayerByUuid(invitationPlayerId)).getGroupManager().getGroupLeaderId();
-
-                // // groupManager of leader
-                // GroupManager groupLeaderManager = ((GroupManagerAccess) player.getWorld().getPlayerByUuid(leaderId)).getGroupManager();
-                // if (groupLeaderManager.getGroupPlayerIdList().size() > ConfigInit.CONFIG.groupSize) {
-                // player.sendMessage(Text.translatable("text.partyaddon.group_is_full", player.getWorld().getPlayerByUuid(leaderId).getName().getString()));
-                // } else {
-                // if (groupLeaderManager.getGroupPlayerIdList().isEmpty()) {
-                // groupLeaderManager.addPlayerToGroup(leaderId); // equals invitationPlayerId
-                // groupLeaderManager.setGroupLeaderId(leaderId);
-
-                // groupLeaderManager.addPlayerToGroup(player.getUuid());
-                // } else {
-                // groupLeaderManager.addPlayerToGroup(player.getUuid());
-                // }
-                // // Update leader
-                // writeS2CSyncGroupManagerPacket((ServerPlayerEntity) player.getWorld().getPlayerByUuid(leaderId), groupLeaderManager);
-
-                // for (int i = 1; i < groupLeaderManager.getGroupPlayerIdList().size(); i++) {
-                // UUID playerId = groupLeaderManager.getGroupPlayerIdList().get(i);
-                // if (player.getWorld().getPlayerByUuid(playerId) != null && player.getWorld().getPlayerByUuid(playerId) instanceof ServerPlayerEntity) {
-
-                // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getWorld().getPlayerByUuid(playerId);
-
-                // List<UUID> groupPlayerList = new ArrayList<UUID>();
-                // groupPlayerList.addAll(groupLeaderManager.getGroupPlayerIdList());
-                // groupPlayerList.remove((Object) serverPlayerEntity.getUuid());
-                // groupPlayerList.add(0, serverPlayerEntity.getUuid());
-                // ((GroupManagerAccess) serverPlayerEntity).getGroupManager().updatePlayerGroupIdList(groupPlayerList, leaderId);
-
-                // if (serverPlayerEntity.getUuid() != player.getUuid()) {
-                // serverPlayerEntity.sendMessage(Text.translatable("text.partyaddon.accepted_invitation", player.getName().getString()));
-                // }
-                // // update manager
-                // writeS2CSyncGroupManagerPacket(serverPlayerEntity, ((GroupManagerAccess) serverPlayerEntity).getGroupManager());
-                // }
-                // }
-
-                // }
-                // }
-                // // set invitation id server and client to 0
-                // ((GroupManagerAccess) player).getGroupManager().declineInvitation();
-                // writeS2CSyncDeclinePacket(player, null);
             });
         });
 
@@ -307,74 +123,6 @@ public class PartyAddonServerPacket {
         });
     }
 
-    // public static void writeS2CSyncGroupManagerPacket(ServerPlayerEntity serverPlayerEntity, GroupManager groupManager) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // IntArrayList intList = new IntArrayList();
-
-    // List<Integer> availablePlayerIdList = new ArrayList<Integer>();
-    // for (int i = 0; i < serverPlayerEntity.getServer().getPlayerManager().getPlayerList().size(); i++) {
-    // availablePlayerIdList.add(serverPlayerEntity.getServer().getPlayerManager().getPlayerList().get(i).getId());
-    // }
-    // availablePlayerIdList.remove((Object) serverPlayerEntity.getId());
-
-    // for (int i = 0; i < groupManager.getGroupPlayerIdList().size(); i++) {
-    // availablePlayerIdList.remove((Object) groupManager.getGroupPlayerIdList().get(i));
-    // }
-
-    // // Map<Integer, String> playerIdNameMap = new HashMap<Integer, String>();
-
-    // // buf.writeMap(playerIdNameMap, PacketByteBuf::writeInt, PacketByteBuf::writeString);
-
-    // intList.addAll(availablePlayerIdList);
-    // buf.writeIntList(intList);
-    // intList.clear();
-    // intList.addAll(groupManager.getStarPlayerIdList());
-    // buf.writeIntList(intList);
-    // intList.clear();
-    // intList.addAll(groupManager.getGroupPlayerIdList());
-    // buf.writeIntList(intList);
-    // intList.clear();
-
-    // buf.writeInt(groupManager.getGroupLeaderId());
-
-    // CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(SYNC_GROUP_MANAGER_SC_PACKET, buf);
-    // serverPlayerEntity.networkHandler.sendPacket(packet);
-    // }
-
-    // public static void writeS2CSyncGroupManagerPacket(ServerPlayerEntity serverPlayerEntity, GroupManager groupManager) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // IntArrayList intList = new IntArrayList();
-
-    // List<Integer> availablePlayerIdList = new ArrayList<Integer>();
-    // for (int i = 0; i < serverPlayerEntity.getServer().getPlayerManager().getPlayerList().size(); i++) {
-    // availablePlayerIdList.add(serverPlayerEntity.getServer().getPlayerManager().getPlayerList().get(i).getId());
-    // }
-    // availablePlayerIdList.remove((Object) serverPlayerEntity.getId());
-
-    // for (int i = 0; i < groupManager.getGroupPlayerIdList().size(); i++) {
-    // availablePlayerIdList.remove((Object) groupManager.getGroupPlayerIdList().get(i));
-    // }
-
-    // // Map<Integer, String> playerIdNameMap = new HashMap<Integer, String>();
-
-    // // buf.writeMap(playerIdNameMap, PacketByteBuf::writeInt, PacketByteBuf::writeString);
-
-    // intList.addAll(availablePlayerIdList);
-    // buf.writeIntList(intList);
-    // intList.clear();
-    // intList.addAll(groupManager.getStarPlayerIdList());
-    // buf.writeIntList(intList);
-    // intList.clear();
-    // intList.addAll(groupManager.getGroupPlayerIdList());
-    // buf.writeIntList(intList);
-    // intList.clear();
-
-    // buf.writeInt(groupManager.getGroupLeaderId());
-
-    // CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(SYNC_GROUP_MANAGER_SC_PACKET, buf);
-    // serverPlayerEntity.networkHandler.sendPacket(packet);
-    // }
-
     public static void writeS2CSyncGroupManagerPacket(ServerPlayerEntity serverPlayerEntity, GroupManager groupManager) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 
@@ -382,8 +130,6 @@ public class PartyAddonServerPacket {
         for (int i = 0; i < serverPlayerEntity.getServer().getPlayerManager().getPlayerList().size(); i++) {
             availablePlayerIdList.add(serverPlayerEntity.getServer().getPlayerManager().getPlayerList().get(i).getUuid());
         }
-
-        // System.out.println("SYNC S2C Available: "+availablePlayerIdList);
 
         availablePlayerIdList.remove((Object) serverPlayerEntity.getUuid());
 
@@ -420,20 +166,9 @@ public class PartyAddonServerPacket {
         for (int i = 0; i < count; i++) {
             buf.writeUuid(((GroupManagerAccess) serverPlayerEntity).getGroupManager().getStarPlayerIdList().get(i));
         }
-        // buf.writeLongArray(array)
-        // IntArrayList intList = new IntArrayList();
-        // intList.addAll(((GroupManagerAccess) serverPlayerEntity).getGroupManager().getStarPlayerIdList());
-        // buf.writeIntList(intList);
         CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(SYNC_STAR_PLAYER_LIST_SC_PACKET, buf);
         serverPlayerEntity.networkHandler.sendPacket(packet);
     }
-
-    // public static void writeS2CSyncInvitationPacket(ServerPlayerEntity serverPlayerEntity, int invitationPlayerId) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // buf.writeInt(invitationPlayerId);
-    // CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(SYNC_INVITATION_SC_PACKET, buf);
-    // serverPlayerEntity.networkHandler.sendPacket(packet);
-    // }
 
     public static void writeS2CSyncInvitationPacket(ServerPlayerEntity serverPlayerEntity, UUID invitationPlayerId) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
@@ -441,17 +176,6 @@ public class PartyAddonServerPacket {
         CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(SYNC_INVITATION_SC_PACKET, buf);
         serverPlayerEntity.networkHandler.sendPacket(packet);
     }
-
-    // public static void writeS2CSyncDeclinePacket(ServerPlayerEntity serverPlayerEntity, int playerId) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // // buf.writeInt(playerId);
-    // CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(SYNC_DECLINE_INVITATION_SC_PACKET, buf);
-    // serverPlayerEntity.networkHandler.sendPacket(packet);
-
-    // // if (playerId != 0 && serverPlayerEntity.world.getEntityById(playerId) != null && serverPlayerEntity.world.getEntityById(playerId) instanceof ServerPlayerEntity) {
-    // // serverPlayerEntity.world.getEntityById(playerId).sendMessage(Text.translatable("text.partyaddon.declined_invitation", serverPlayerEntity.getName().getString()));
-    // // }
-    // }
 
     public static void writeS2CSyncDeclinePacket(ServerPlayerEntity serverPlayerEntity, UUID playerId) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
@@ -464,34 +188,11 @@ public class PartyAddonServerPacket {
         // }
     }
 
-    // public static void writeS2CDeclineInvitationPacket(ServerPlayerEntity serverPlayerEntity, int playerId) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // buf.writeInt(playerId);
-    // CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(DECLINE_INVITATION_SC_PACKET, buf);
-    // serverPlayerEntity.networkHandler.sendPacket(packet);
-
-    // if (serverPlayerEntity.world.getEntityById(playerId) != null && serverPlayerEntity.world.getEntityById(playerId) instanceof ServerPlayerEntity) {
-    // serverPlayerEntity.world.getEntityById(playerId).sendMessage(Text.translatable("text.partyaddon.declined_invitation", serverPlayerEntity.getName().getString()));
-    // }
-    // }
-
     public static void writeS2COpenPartyScreenPacket(ServerPlayerEntity serverPlayerEntity) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(OPEN_PARTY_SCREEN_SC_PACKET, buf);
         serverPlayerEntity.networkHandler.sendPacket(packet);
     }
-
-    // public static void writeS2CLeaveGroupPacket(ServerPlayerEntity serverPlayerEntity, int playerId, int newGroupLeaderId) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // buf.writeInt(playerId);
-    // buf.writeInt(newGroupLeaderId);
-    // System.out.println("WRITE");
-    // CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(LEAVE_GROUP_SC_PACKET, buf);
-    // serverPlayerEntity.networkHandler.sendPacket(packet);
-
-    // // update manager
-    // writeS2CUpdateGroupManagerPacket(serverPlayerEntity);
-    // }
 
     public static void writeS2CMapCompatPacket(ServerPlayerEntity serverPlayerEntity) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());

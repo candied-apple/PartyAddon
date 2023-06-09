@@ -11,6 +11,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.partyaddon.access.GroupManagerAccess;
 import net.partyaddon.network.PartyAddonServerPacket;
 
+@SuppressWarnings("unused")
 @Mixin(ServerWorld.class)
 public class ServerWorldMixin {
 

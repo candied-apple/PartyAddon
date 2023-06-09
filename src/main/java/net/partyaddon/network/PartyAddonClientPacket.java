@@ -26,13 +26,7 @@ public class PartyAddonClientPacket {
                 client.setScreen(new PartyScreen());
             });
         });
-        // ClientPlayNetworking.registerGlobalReceiver(PartyAddonServerPacket.SYNC_STAR_PLAYER_LIST_SC_PACKET, (client, handler, buf, sender) -> {
-        // List<Integer> starPlayerIdList = buf.readIntList();
-        // client.execute(() -> {
-        // GroupManager groupManager = ((GroupManagerAccess) client.player).getGroupManager();
-        // groupManager.updateStarPlayerIdList(starPlayerIdList);
-        // });
-        // });
+
         ClientPlayNetworking.registerGlobalReceiver(PartyAddonServerPacket.SYNC_STAR_PLAYER_LIST_SC_PACKET, (client, handler, buf, sender) -> {
             int starPlayerCount = buf.readInt();
             List<UUID> starPlayerIdList = new ArrayList<UUID>();
@@ -44,18 +38,7 @@ public class PartyAddonClientPacket {
                 groupManager.updateStarPlayerIdList(starPlayerIdList);
             });
         });
-        // ClientPlayNetworking.registerGlobalReceiver(PartyAddonServerPacket.SYNC_GROUP_MANAGER_SC_PACKET, (client, handler, buf, sender) -> {
-        // List<Integer> availablePlayerIdList = buf.readIntList();
-        // List<Integer> starPlayerIdList = buf.readIntList();
-        // List<Integer> groupPlayerIdList = buf.readIntList();
-        // int groupLeaderId = buf.readInt();
-        // client.execute(() -> {
-        // GroupManager groupManager = ((GroupManagerAccess) client.player).getGroupManager();
-        // groupManager.setAvailablePlayerIdList(availablePlayerIdList);
-        // groupManager.updateStarPlayerIdList(starPlayerIdList);
-        // groupManager.updatePlayerGroupIdList(groupPlayerIdList, groupLeaderId);
-        // });
-        // });
+
         ClientPlayNetworking.registerGlobalReceiver(PartyAddonServerPacket.SYNC_GROUP_MANAGER_SC_PACKET, (client, handler, buf, sender) -> {
             int availablePlayerCount = buf.readInt();
             List<UUID> availablePlayerIdList = new ArrayList<UUID>();
@@ -64,8 +47,6 @@ public class PartyAddonClientPacket {
                     availablePlayerIdList.add(buf.readUuid());
                 }
             }
-
-            // System.out.println("GET ON CLIENT "+availablePlayerIdList);
 
             int starPlayerCount = buf.readInt();
             List<UUID> starPlayerIdList = new ArrayList<UUID>();
@@ -91,18 +72,13 @@ public class PartyAddonClientPacket {
             });
         });
 
-        // ClientPlayNetworking.registerGlobalReceiver(PartyAddonServerPacket.SYNC_INVITATION_SC_PACKET, (client, handler, buf, sender) -> {
-        // int playerId = buf.readInt();
-        // client.execute(() -> {
-        // ((GroupManagerAccess) client.player).getGroupManager().invitePlayerToGroup(playerId);
-        // });
-        // });
         ClientPlayNetworking.registerGlobalReceiver(PartyAddonServerPacket.SYNC_INVITATION_SC_PACKET, (client, handler, buf, sender) -> {
             UUID playerId = buf.readUuid();
             client.execute(() -> {
                 ((GroupManagerAccess) client.player).getGroupManager().invitePlayerToGroup(playerId);
             });
         });
+
         ClientPlayNetworking.registerGlobalReceiver(PartyAddonServerPacket.SYNC_DECLINE_INVITATION_SC_PACKET, (client, handler, buf, sender) -> {
             // int playerId = buf.readInt();
             // maybe use playerId to send feedback?
@@ -110,27 +86,7 @@ public class PartyAddonClientPacket {
                 ((GroupManagerAccess) client.player).getGroupManager().declineInvitation();
             });
         });
-        // ClientPlayNetworking.registerGlobalReceiver(PartyAddonServerPacket.LEAVE_GROUP_SC_PACKET, (client, handler, buf, sender) -> {
-        // int playerId = buf.readInt();
-        // int newGroupLeaderId = buf.readInt();
 
-        // System.out.println("XXX");
-        // client.execute(() -> {
-        // GroupManager groupManager = ((GroupManagerAccess) client.player).getGroupManager();
-        // groupManager.removePlayerFromGroup(playerId);
-        // // WRITE WITH LOGGER
-        // System.out.println("UPDATE GROUP ???" + client.player + " : " + groupManager.getGroupPlayerIdList());
-
-        // if (groupManager.getGroupPlayerIdList().size() <= 1) {
-        // groupManager.updatePlayerGroupIdList(new ArrayList<Integer>(), 0);
-
-        // System.out.println("UPDATE GROUP " + client.player);
-
-        // } else {
-        // groupManager.setGroupLeaderId(newGroupLeaderId);
-        // }
-        // });
-        // });
         ClientPlayNetworking.registerGlobalReceiver(PartyAddonServerPacket.MAP_COMPAT_SC_PACKET, (client, handler, buf, sender) -> {
             int uuidCount = buf.readInt();
             List<UUID> groupPlayerUUIDs = new ArrayList<UUID>();
@@ -152,13 +108,6 @@ public class PartyAddonClientPacket {
         MinecraftClient.getInstance().getNetworkHandler().sendPacket(new CustomPayloadC2SPacket(PartyAddonServerPacket.OPEN_PARTY_SCREEN_CS_PACKET, new PacketByteBuf(Unpooled.buffer())));
     }
 
-    // star stuff
-    // public static void writeC2SChangeStarListPacket(int entityId) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // buf.writeInt(entityId);
-    // CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(PartyAddonServerPacket.CHANGE_STAR_PLAYER_LIST_CS_PACKET, buf);
-    // MinecraftClient.getInstance().getNetworkHandler().sendPacket(packet);
-    // }
     public static void writeC2SChangeStarListPacket(UUID entityId) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeUuid(entityId);
@@ -166,12 +115,6 @@ public class PartyAddonClientPacket {
         MinecraftClient.getInstance().getNetworkHandler().sendPacket(packet);
     }
 
-    // public static void writeC2SInvitePlayerToGroupPacket(int invitedPlayerId) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // buf.writeInt(invitedPlayerId);
-    // CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(PartyAddonServerPacket.INVITE_PLAYER_TO_GROUP_CS_PACKET, buf);
-    // MinecraftClient.getInstance().getNetworkHandler().sendPacket(packet);
-    // }
     public static void writeC2SInvitePlayerToGroupPacket(UUID invitedPlayerId) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeUuid(invitedPlayerId);
@@ -179,25 +122,12 @@ public class PartyAddonClientPacket {
         MinecraftClient.getInstance().getNetworkHandler().sendPacket(packet);
     }
 
-    // public static void writeC2SAcceptInvitationPacket(int invitationPlayerId) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // buf.writeInt(invitationPlayerId);
-    // CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(PartyAddonServerPacket.ACCEPT_INVITATION_CS_PACKET, buf);
-    // MinecraftClient.getInstance().getNetworkHandler().sendPacket(packet);
-    // }
     public static void writeC2SAcceptInvitationPacket(UUID invitationPlayerId) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeUuid(invitationPlayerId);
         CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(PartyAddonServerPacket.ACCEPT_INVITATION_CS_PACKET, buf);
         MinecraftClient.getInstance().getNetworkHandler().sendPacket(packet);
     }
-
-    // public static void writeC2SDeclineInvitationPacket(int entityId) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // buf.writeInt(entityId);
-    // CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(PartyAddonServerPacket.DECLINE_INVITATION_CS_PACKET, buf);
-    // MinecraftClient.getInstance().getNetworkHandler().sendPacket(packet);
-    // }
 
     public static void writeC2SDeclineInvitationPacket(UUID entityId) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
@@ -211,13 +141,6 @@ public class PartyAddonClientPacket {
         CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(PartyAddonServerPacket.LEAVE_GROUP_CS_PACKET, buf);
         MinecraftClient.getInstance().getNetworkHandler().sendPacket(packet);
     }
-
-    // public static void writeC2SKickPlayerPacket(int kickPlayerId) {
-    // PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-    // buf.writeInt(kickPlayerId);
-    // CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(PartyAddonServerPacket.KICK_PLAYER_CS_PACKET, buf);
-    // MinecraftClient.getInstance().getNetworkHandler().sendPacket(packet);
-    // }
 
     public static void writeC2SKickPlayerPacket(UUID groupLeaderId, UUID kickPlayerId) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());

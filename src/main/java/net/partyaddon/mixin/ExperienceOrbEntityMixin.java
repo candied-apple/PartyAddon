@@ -26,19 +26,6 @@ public abstract class ExperienceOrbEntityMixin extends Entity {
         super(type, world);
     }
 
-    // @Inject(method = "onPlayerCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExperience(I)V"), cancellable = true, locals =
-    // LocalCapture.CAPTURE_FAILSOFT)
-    // private void onPlayerCollisionMixin(PlayerEntity player, CallbackInfo info, int i) {
-    // if (ConfigInit.CONFIG.distributeVanillaXP && !((GroupManagerAccess) player).getGroupManager().getGroupPlayerIdList().isEmpty()) {
-    // ((GroupLeaderAccess) player.world.getEntityById(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId())).addLeaderVanillaExperience(i);
-    // --this.pickingCount;
-    // if (this.pickingCount == 0) {
-    // this.discard();
-    // }
-    // info.cancel();
-    // }
-    // }
-
     @Inject(method = "onPlayerCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExperience(I)V"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     private void onPlayerCollisionMixin(PlayerEntity player, CallbackInfo info, int i) {
         if (ConfigInit.CONFIG.distributeVanillaXP && !((GroupManagerAccess) player).getGroupManager().getGroupPlayerIdList().isEmpty()

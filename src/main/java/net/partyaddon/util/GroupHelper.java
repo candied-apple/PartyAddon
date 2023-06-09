@@ -12,6 +12,7 @@ import net.partyaddon.group.GroupManager;
 import net.partyaddon.init.ConfigInit;
 import net.partyaddon.network.PartyAddonServerPacket;
 
+@SuppressWarnings("unused")
 public class GroupHelper {
 
 }

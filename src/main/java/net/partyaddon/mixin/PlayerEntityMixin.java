@@ -10,11 +10,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.partyaddon.access.GroupManagerAccess;
 import net.partyaddon.group.GroupManager;
-import net.partyaddon.network.PartyAddonServerPacket;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements GroupManagerAccess {

@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,21 +25,6 @@ public abstract class LevelZServerPlayerEntityMixin extends PlayerEntity impleme
     public LevelZServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
     }
-
-    // @Override
-    // public void addLeaderLevelZExperience(int experience) {
-    // this.collectedLevelZXP += experience;
-    // List<Integer> groupPlayerIdList = ((GroupManagerAccess) this).getGroupManager().getGroupPlayerIdList();
-    // if (!groupPlayerIdList.isEmpty()) {
-    // if (groupPlayerIdList.size() <= this.collectedLevelZXP) {
-    // for (int i = 0; i < groupPlayerIdList.size(); i++) {
-    // ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) this.world.getEntityById(groupPlayerIdList.get(i));
-    // ((GroupLeaderAccess) serverPlayerEntity).addLevelZExperience(this.collectedLevelZXP / groupPlayerIdList.size());
-    // }
-    // this.collectedLevelZXP -= groupPlayerIdList.size();
-    // }
-    // }
-    // }
 
     @Override
     public void addLeaderLevelZExperience(int experience) {

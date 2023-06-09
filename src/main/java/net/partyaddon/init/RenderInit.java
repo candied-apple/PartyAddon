@@ -32,9 +32,7 @@ public class RenderInit {
             MinecraftClient client = MinecraftClient.getInstance();
             if (client.player != null && ConfigInit.CONFIG.showGroupHud && !((GroupManagerAccess) client.player).getGroupManager().getGroupPlayerIdList().isEmpty()) {
                 RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, ConfigInit.CONFIG.hudOpacity);
-                // RenderSystem.setShader(GameRenderer::getPositionTexShader);
-                // RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_GUI_ICONS);
-                // RenderSystem.enableBlend();
+                RenderSystem.enableBlend();
                 // RenderSystem.defaultBlendFunc();
 
                 List<UUID> groupPlayerIdList = ((GroupManagerAccess) client.player).getGroupManager().getGroupPlayerIdList();
