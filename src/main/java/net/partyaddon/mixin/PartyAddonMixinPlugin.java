@@ -24,7 +24,8 @@ public class PartyAddonMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if ((mixinClassName.contains("LevelExperienceOrbEntityMixin") || mixinClassName.contains("LevelZServerPlayerEntityMixin")) && !FabricLoader.getInstance().isModLoaded("levelz"))
             return false;
-        if ((mixinClassName.contains("GuiMapMixin") || mixinClassName.contains("ControlsHandlerMixin")) && !FabricLoader.getInstance().isModLoaded("xaeroworldmap")) {
+        if ((mixinClassName.contains("GuiMapMixin") || mixinClassName.contains("ControlsHandlerMixin"))
+                && (!FabricLoader.getInstance().isModLoaded("xaeroworldmap") || FabricLoader.getInstance().isModLoaded("xaeroplus"))) {
             return false;
         }
 

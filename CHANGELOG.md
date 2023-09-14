@@ -1,6 +1,6 @@
 ### Added:
 - 
 ### Fixed:
-- 
+- Fixed xaeroplus compat
 ### Changed:
-- Updated to mc 1.20.1
+- 
