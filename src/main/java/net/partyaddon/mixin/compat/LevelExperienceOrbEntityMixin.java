@@ -5,9 +5,9 @@ import java.util.Map;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
+import net.levelz.access.PlayerSyncAccess;
 import net.levelz.entity.LevelExperienceOrbEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -24,16 +24,15 @@ public abstract class LevelExperienceOrbEntityMixin extends Entity {
         super(type, world);
     }
 
-    @Inject(method = "onPlayerCollision", at = @At(value = "INVOKE", target = "Ljava/util/Map;forEach(Ljava/util/function/BiConsumer;)V"), cancellable = true)
-    private void onPlayerCollisionMixin(PlayerEntity player, CallbackInfo info) {
+    // lambda injection
+    @Redirect(method = "lambda$onPlayerCollision$4", at = @At(value = "INVOKE", target = "Lnet/levelz/access/PlayerSyncAccess;addLevelExperience(I)V"))
+    private static void onPlayerCollisionMixin(PlayerSyncAccess PlayerSyncAccess, int oldValue, PlayerEntity player, Integer value, Integer amount) {
         if (ConfigInit.CONFIG.distributeLevelZXP && !((GroupManagerAccess) player).getGroupManager().getGroupPlayerIdList().isEmpty()
                 && ((GroupManagerAccess) player).getGroupManager().getGroupLeaderId() != null
                 && player.getWorld().getPlayerByUuid(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId()) != null) {
-            getClumpedMap().forEach((value, amount) -> {
-                ((GroupLeaderAccess) player.getWorld().getPlayerByUuid(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId())).addLeaderLevelZExperience(value * amount);
-            });
-            this.discard();
-            info.cancel();
+            ((GroupLeaderAccess) player.getWorld().getPlayerByUuid(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId())).addLeaderLevelZExperience(value * amount);
+        } else {
+            PlayerSyncAccess.addLevelExperience(value * amount);
         }
     }
 
