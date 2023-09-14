@@ -35,6 +35,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Gr
 
     @Inject(method = "copyFrom", at = @At("TAIL"))
     private void copyFromMixin(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo info) {
+        ((GroupManagerAccess) this).setGroupManager(((GroupManagerAccess) oldPlayer).getGroupManager());
         PartyAddonServerPacket.writeS2CSyncGroupManagerPacket((ServerPlayerEntity) (Object) this, ((GroupManagerAccess) oldPlayer).getGroupManager());
     }
 

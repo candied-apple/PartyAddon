@@ -17,7 +17,7 @@ import net.partyaddon.group.GroupManager;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements GroupManagerAccess {
 
-    private final GroupManager groupManager = new GroupManager((PlayerEntity) (Object) this);
+    private GroupManager groupManager = new GroupManager((PlayerEntity) (Object) this);
 
     public PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -41,6 +41,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GroupMan
     @Override
     public GroupManager getGroupManager() {
         return this.groupManager;
+    }
+
+    @Override
+    public void setGroupManager(GroupManager groupManager) {
+        this.groupManager = groupManager;
     }
 
     @Inject(method = "remove", at = @At("HEAD"))

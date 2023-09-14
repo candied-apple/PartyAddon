@@ -18,7 +18,6 @@ import net.partyaddon.access.GroupManagerAccess;
 import net.partyaddon.group.GroupManager;
 import net.partyaddon.network.PartyAddonServerPacket;
 
-@SuppressWarnings("unused")
 @Mixin(PlayerManager.class)
 public class PlayerManagerMixin {
 
@@ -27,11 +26,11 @@ public class PlayerManagerMixin {
         GroupManager.leaveGroup(player, false);
     }
 
-    // @Inject(method = "respawnPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;onPlayerRespawned(Lnet/minecraft/server/network/ServerPlayerEntity;)V"), locals =
-    // LocalCapture.CAPTURE_FAILSOFT)
-    // private void respawnPlayerMixin(ServerPlayerEntity player, boolean alive, CallbackInfoReturnable<ServerPlayerEntity> info, BlockPos blockPos, float f, boolean bl, ServerWorld serverWorld,
-    // Optional<Vec3d> optional2, ServerWorld serverWorld2, ServerPlayerEntity serverPlayerEntity) {
-    // // PartyAddonServerPacket.writeS2CSyncGroupManagerPacket(serverPlayerEntity, ((GroupManagerAccess) player).getGroupManager());
-    // }
+    // Required
+    @Inject(method = "respawnPlayer", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILSOFT)
+    private void respawnPlayerMixin(ServerPlayerEntity player, boolean alive, CallbackInfoReturnable<ServerPlayerEntity> info, BlockPos blockPos, float f, boolean bl, ServerWorld serverWorld,
+            Optional<Vec3d> optional2, ServerWorld serverWorld2, ServerPlayerEntity serverPlayerEntity) {
+        PartyAddonServerPacket.writeS2CSyncGroupManagerPacket(serverPlayerEntity, ((GroupManagerAccess) player).getGroupManager());
+    }
 
 }
