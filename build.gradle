@@ -33,11 +33,11 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
     // LevelZ
-    modImplementation ('maven.modrinth:levelz:1.4.10+1.20.1') {
+    modImplementation ('maven.modrinth:levelz:1.4.11+1.20.1') {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
     // LibZ
-    modApi ('maven.modrinth:libz:1.0.1+1.20.1') {
+    modApi ('maven.modrinth:libz:1.0.2+1.20.1') {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	// Clumps
@@ -45,7 +45,7 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	// WorldMap
-	modCompileOnly ('maven.modrinth:xaeros-world-map:1.30.3_Fabric_1.20') {
+	modCompileOnly ('maven.modrinth:xaeros-world-map:1.34.1_Fabric_1.20') {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 }
