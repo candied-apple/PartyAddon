@@ -1,4 +1,4 @@
-package net.partyaddon.gui;
+package net.partyaddon.screen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -311,7 +311,7 @@ public class PartyScreen extends Screen implements Tab {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (this.client != null) {
-            DrawTabHelper.onTabButtonClick(client, this, this.left, this.top, mouseX, mouseY, this.getFocused() != null);
+            DrawTabHelper.onTabButtonClick(client, this, this.left, this.top, mouseX, mouseY, false);
         }
 
         this.scrolling = false;
@@ -438,20 +438,15 @@ public class PartyScreen extends Screen implements Tab {
         @Override
         public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
             TextRenderer textRenderer = client.textRenderer;
-            // RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            // RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_BACKGROUND);
-            // RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
             int i = this.getTextureY();
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.enableDepthTest();
             context.drawTexture(RenderInit.PARTY_ADDON_BACKGROUND, this.getX(), this.getY(), star ? 86 : 0, 216 + i * 13, this.width, this.height);
             if (this.leader) {
-                // RenderSystem.setShaderTexture(0, RenderInit.PARTY_ADDON_GUI_ICONS);
                 RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
                 RenderSystem.enableBlend();
-
-                context.drawTexture(RenderInit.PARTY_ADDON_BACKGROUND, this.getX() + 67, this.getY() + 3, 0, 32, 7, 7);
+                context.drawTexture(RenderInit.PARTY_ADDON_GUI_ICONS, this.getX() + 67, this.getY() + 3, 0, 32, 7, 7);
             }
 
             // this.renderBackground(context, client, mouseX, mouseY);

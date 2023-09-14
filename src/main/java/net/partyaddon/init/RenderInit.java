@@ -14,8 +14,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.partyaddon.access.GroupManagerAccess;
-import net.partyaddon.gui.PartyScreen;
-import net.partyaddon.gui.widget.PartyTab;
+import net.partyaddon.screen.PartyScreen;
+import net.partyaddon.screen.widget.PartyTab;
 import net.partyaddon.util.NameHelper;
 
 @Environment(EnvType.CLIENT)

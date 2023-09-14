@@ -1,4 +1,4 @@
-package net.partyaddon.gui.widget;
+package net.partyaddon.screen.widget;
 
 import net.libz.api.InventoryTab;
 import net.minecraft.client.MinecraftClient;

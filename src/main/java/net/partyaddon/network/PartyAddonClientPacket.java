@@ -14,8 +14,8 @@ import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
 import net.minecraft.util.math.BlockPos;
 import net.partyaddon.access.GroupManagerAccess;
 import net.partyaddon.group.GroupManager;
-import net.partyaddon.gui.PartyScreen;
 import net.partyaddon.init.CompatInit;
+import net.partyaddon.screen.PartyScreen;
 
 @Environment(EnvType.CLIENT)
 public class PartyAddonClientPacket {
