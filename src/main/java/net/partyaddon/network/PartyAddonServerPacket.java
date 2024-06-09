@@ -70,11 +70,11 @@ public class PartyAddonServerPacket {
         ServerPlayNetworking.registerGlobalReceiver(INVITE_PLAYER_TO_GROUP_CS_PACKET, (server, player, handler, buffer, sender) -> {
             UUID invitedPlayerId = buffer.readUuid();
             server.execute(() -> {
-                if (player.getWorld().getPlayerByUuid(invitedPlayerId) != null && player.getWorld().getPlayerByUuid(invitedPlayerId) instanceof ServerPlayerEntity) {
-                    player.getWorld().getPlayerByUuid(invitedPlayerId).sendMessage(Text.translatable("text.partyaddon.invitation", player.getName().getString()));
-                    ((GroupManagerAccess) player.getWorld().getPlayerByUuid(invitedPlayerId)).getGroupManager().invitePlayerToGroup(player.getUuid());
+                if (player.getServer().getPlayerManager().getPlayer(invitedPlayerId) != null && player.getServer().getPlayerManager().getPlayer(invitedPlayerId) instanceof ServerPlayerEntity) {
+                    player.getServer().getPlayerManager().getPlayer(invitedPlayerId).sendMessage(Text.translatable("text.partyaddon.invitation", player.getName().getString()));
+                    ((GroupManagerAccess) player.getServer().getPlayerManager().getPlayer(invitedPlayerId)).getGroupManager().invitePlayerToGroup(player.getUuid());
                     // Sync invitation
-                    writeS2CSyncInvitationPacket((ServerPlayerEntity) player.getWorld().getPlayerByUuid(invitedPlayerId), player.getUuid());
+                    writeS2CSyncInvitationPacket((ServerPlayerEntity) player.getServer().getPlayerManager().getPlayer(invitedPlayerId), player.getUuid());
                 }
             });
         });
@@ -85,8 +85,8 @@ public class PartyAddonServerPacket {
                 writeS2CSyncDeclinePacket(player, invitationPlayerId);
                 ((GroupManagerAccess) player).getGroupManager().declineInvitation();
 
-                if (player.getWorld().getPlayerByUuid(invitationPlayerId) != null && player.getWorld().getPlayerByUuid(invitationPlayerId) instanceof ServerPlayerEntity) {
-                    player.getWorld().getPlayerByUuid(invitationPlayerId).sendMessage(Text.translatable("text.partyaddon.declined_invitation", player.getName().getString()));
+                if (player.getServer().getPlayerManager().getPlayer(invitationPlayerId) != null && player.getServer().getPlayerManager().getPlayer(invitationPlayerId) instanceof ServerPlayerEntity) {
+                    player.getServer().getPlayerManager().getPlayer(invitationPlayerId).sendMessage(Text.translatable("text.partyaddon.declined_invitation", player.getName().getString()));
                 }
             });
         });
@@ -108,10 +108,10 @@ public class PartyAddonServerPacket {
             UUID groupLeaderUUID = buffer.readUuid();
             UUID kickPlayerId = buffer.readUuid();
             server.execute(() -> {
-                if (player.getWorld().getPlayerByUuid(kickPlayerId) != null && player.getWorld().getPlayerByUuid(kickPlayerId) instanceof ServerPlayerEntity
-                        && player.getWorld().getPlayerByUuid(groupLeaderUUID) != null && player.getWorld().getPlayerByUuid(groupLeaderUUID) instanceof ServerPlayerEntity
-                        && ((GroupManagerAccess) player.getWorld().getPlayerByUuid(groupLeaderUUID)).getGroupManager().isGroupLeader()) {
-                    GroupManager.leaveGroup((ServerPlayerEntity) player.getWorld().getPlayerByUuid(kickPlayerId), true);
+                if (player.getServer().getPlayerManager().getPlayer(kickPlayerId) != null && player.getServer().getPlayerManager().getPlayer(kickPlayerId) instanceof ServerPlayerEntity
+                        && player.getServer().getPlayerManager().getPlayer(groupLeaderUUID) != null && player.getServer().getPlayerManager().getPlayer(groupLeaderUUID) instanceof ServerPlayerEntity
+                        && ((GroupManagerAccess) player.getServer().getPlayerManager().getPlayer(groupLeaderUUID)).getGroupManager().isGroupLeader()) {
+                    GroupManager.leaveGroup((ServerPlayerEntity) player.getServer().getPlayerManager().getPlayer(kickPlayerId), true);
                 }
             });
         });

@@ -7,6 +7,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.partyaddon.access.GroupLeaderAccess;
 import net.partyaddon.access.GroupManagerAccess;
 
+import java.util.Objects;
+
 public class EventInit {
 
     private static boolean isClumpsLoaded = FabricLoader.getInstance().isModLoaded("clumps");
@@ -18,7 +20,8 @@ public class EventInit {
                 PlayerEntity player = event.getPlayer();
 
                 if (ConfigInit.CONFIG.distributeVanillaXP && !((GroupManagerAccess) player).getGroupManager().getGroupPlayerIdList().isEmpty()) {
-                    ((GroupLeaderAccess) player.getWorld().getPlayerByUuid(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId())).addLeaderVanillaExperience(amount);
+                    ((GroupLeaderAccess) Objects.requireNonNull(Objects.requireNonNull(player.getServer()).getPlayerManager().getPlayer
+                            (((GroupManagerAccess) player).getGroupManager().getGroupLeaderId()))).addLeaderVanillaExperience(amount);
                     event.setValue(0);
                 }
                 return null;
