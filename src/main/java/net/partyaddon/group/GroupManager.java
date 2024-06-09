@@ -70,7 +70,7 @@ public class GroupManager {
     }
 
     public void addPlayerStar(UUID playerId) {
-        if (this.playerEntity.getWorld().getPlayerByUuid(playerId) != null && !this.starPlayerIdList.contains(playerId)) {
+        if (this.playerEntity.getServer().getPlayerManager().getPlayer(playerId) != null && !this.starPlayerIdList.contains(playerId)) {
             this.starPlayerIdList.add(playerId);
         }
     }
@@ -89,7 +89,7 @@ public class GroupManager {
     }
 
     public void addPlayerToGroup(UUID playerId) {
-        if (this.playerEntity.getWorld().getPlayerByUuid(playerId) != null && !this.groupPlayerIdList.contains(playerId)) {
+        if (this.playerEntity.getServer().getPlayerManager().getPlayer(playerId) != null && !this.groupPlayerIdList.contains(playerId)) {
             this.groupPlayerIdList.add(playerId);
         }
     }
@@ -153,15 +153,15 @@ public class GroupManager {
     }
 
     public static void tryJoinGroup(ServerPlayerEntity player, UUID invitationPlayerUUID) {
-        if (invitationPlayerUUID != null && player.getWorld().getPlayerByUuid(invitationPlayerUUID) != null && player.getWorld().getPlayerByUuid(invitationPlayerUUID) instanceof ServerPlayerEntity) {
+        if (invitationPlayerUUID != null && player.getServer().getPlayerManager().getPlayer(invitationPlayerUUID) != null && player.getServer().getPlayerManager().getPlayer(invitationPlayerUUID) instanceof ServerPlayerEntity) {
 
-            UUID leaderId = ((GroupManagerAccess) player.getWorld().getPlayerByUuid(invitationPlayerUUID)).getGroupManager().getGroupLeaderId() == null ? invitationPlayerUUID
-                    : ((GroupManagerAccess) player.getWorld().getPlayerByUuid(invitationPlayerUUID)).getGroupManager().getGroupLeaderId();
+            UUID leaderId = ((GroupManagerAccess) player.getServer().getPlayerManager().getPlayer(invitationPlayerUUID)).getGroupManager().getGroupLeaderId() == null ? invitationPlayerUUID
+                    : ((GroupManagerAccess) player.getServer().getPlayerManager().getPlayer(invitationPlayerUUID)).getGroupManager().getGroupLeaderId();
 
             // groupManager of leader
-            GroupManager groupLeaderManager = ((GroupManagerAccess) player.getWorld().getPlayerByUuid(leaderId)).getGroupManager();
+            GroupManager groupLeaderManager = ((GroupManagerAccess) player.getServer().getPlayerManager().getPlayer(leaderId)).getGroupManager();
             if (groupLeaderManager.getGroupPlayerIdList().size() > ConfigInit.CONFIG.groupSize) {
-                player.sendMessage(Text.translatable("text.partyaddon.group_is_full", player.getWorld().getPlayerByUuid(leaderId).getName().getString()));
+                player.sendMessage(Text.translatable("text.partyaddon.group_is_full", player.getServer().getPlayerManager().getPlayer(leaderId).getName().getString()));
             } else {
                 if (groupLeaderManager.getGroupPlayerIdList().isEmpty()) {
                     groupLeaderManager.addPlayerToGroup(leaderId); // equals invitationPlayerId
@@ -172,13 +172,13 @@ public class GroupManager {
                     groupLeaderManager.addPlayerToGroup(player.getUuid());
                 }
                 // Update leader
-                PartyAddonServerPacket.writeS2CSyncGroupManagerPacket((ServerPlayerEntity) player.getWorld().getPlayerByUuid(leaderId), groupLeaderManager);
+                PartyAddonServerPacket.writeS2CSyncGroupManagerPacket((ServerPlayerEntity) player.getServer().getPlayerManager().getPlayer(leaderId), groupLeaderManager);
 
                 for (int i = 1; i < groupLeaderManager.getGroupPlayerIdList().size(); i++) {
                     UUID playerId = groupLeaderManager.getGroupPlayerIdList().get(i);
-                    if (player.getWorld().getPlayerByUuid(playerId) != null && player.getWorld().getPlayerByUuid(playerId) instanceof ServerPlayerEntity) {
+                    if (player.getServer().getPlayerManager().getPlayer(playerId) != null && player.getServer().getPlayerManager().getPlayer(playerId) instanceof ServerPlayerEntity) {
 
-                        ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getWorld().getPlayerByUuid(playerId);
+                        ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getServer().getPlayerManager().getPlayer(playerId);
 
                         List<UUID> groupPlayerList = new ArrayList<UUID>();
                         groupPlayerList.addAll(groupLeaderManager.getGroupPlayerIdList());
@@ -208,8 +208,8 @@ public class GroupManager {
         if (groupManager.getGroupPlayerIdList().size() > 0) {
             for (int i = 1; i < groupManager.getGroupPlayerIdList().size(); i++) {
                 UUID playerId = groupManager.getGroupPlayerIdList().get(i);
-                if (player.getWorld().getPlayerByUuid(playerId) != null && player.getWorld().getPlayerByUuid(playerId) instanceof ServerPlayerEntity) {
-                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getWorld().getPlayerByUuid(playerId);
+                if (player.getServer().getPlayerManager().getPlayer(playerId) != null && player.getServer().getPlayerManager().getPlayer(playerId) instanceof ServerPlayerEntity) {
+                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player.getServer().getPlayerManager().getPlayer(playerId);
 
                     serverPlayerEntity.sendMessage(Text.translatable("text.partyaddon.left_group", player.getName().getString()));
 

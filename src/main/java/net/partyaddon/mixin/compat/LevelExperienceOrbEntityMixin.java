@@ -29,8 +29,8 @@ public abstract class LevelExperienceOrbEntityMixin extends Entity {
     private static void onPlayerCollisionMixin(PlayerSyncAccess PlayerSyncAccess, int oldValue, PlayerEntity player, Integer value, Integer amount) {
         if (ConfigInit.CONFIG.distributeLevelZXP && !((GroupManagerAccess) player).getGroupManager().getGroupPlayerIdList().isEmpty()
                 && ((GroupManagerAccess) player).getGroupManager().getGroupLeaderId() != null
-                && player.getWorld().getPlayerByUuid(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId()) != null) {
-            ((GroupLeaderAccess) player.getWorld().getPlayerByUuid(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId())).addLeaderLevelZExperience(value * amount);
+                && player.getServer().getPlayerManager().getPlayer(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId()) != null) {
+            ((GroupLeaderAccess) player.getServer().getPlayerManager().getPlayer(((GroupManagerAccess) player).getGroupManager().getGroupLeaderId())).addLeaderLevelZExperience(value * amount);
         } else {
             PlayerSyncAccess.addLevelExperience(value * amount);
         }
